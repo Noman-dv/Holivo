@@ -1,0 +1,56 @@
+{
+  "hotels": [
+    {
+      "id": "1",
+      "name": "Grand Hotel",
+      "location": {
+        "city": "Los Angeles",
+        "address": "123 Main Street",
+        "coordinates": {
+          "lat": 34.0522,
+          "lng": -118.2437
+        }
+      },
+      "rating": 4.5,
+      "pricePerNight": 150.00,
+      "amenities": ["WiFi", "Pool", "Gym", "Spa"],
+      "image": "https://via.placeholder.com/400x300",
+      "available": true
+    },
+    {
+      "id": "2",
+      "name": "Beachside Resort",
+      "location": {
+        "city": "Los Angeles",
+        "address": "456 Ocean Drive",
+        "coordinates": {
+          "lat": 34.0522,
+          "lng": -118.2437
+        }
+      },
+      "rating": 4.8,
+      "pricePerNight": 220.00,
+      "amenities": ["WiFi", "Pool", "Beach Access", "Restaurant", "Spa"],
+      "image": "https://via.placeholder.com/400x300",
+      "available": true
+    },
+    {
+      "id": "3",
+      "name": "City Center Hotel",
+      "location": {
+        "city": "Los Angeles",
+        "address": "789 Downtown Blvd",
+        "coordinates": {
+          "lat": 34.0522,
+          "lng": -118.2437
+        }
+      },
+      "rating": 4.2,
+      "pricePerNight": 120.00,
+      "amenities": ["WiFi", "Gym", "Restaurant"],
+      "image": "https://via.placeholder.com/400x300",
+      "available": true
+    }
+  ]
+}
+

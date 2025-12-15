@@ -1,0 +1,56 @@
+{
+  "cars": [
+    {
+      "id": "1",
+      "provider": "Rent-A-Car Co",
+      "vehicle": {
+        "make": "Toyota",
+        "model": "Camry",
+        "year": 2023,
+        "type": "Sedan"
+      },
+      "pricePerDay": 45.00,
+      "location": {
+        "pickup": "LAX Airport",
+        "dropoff": "LAX Airport"
+      },
+      "features": ["Automatic", "AC", "GPS", "Bluetooth"],
+      "available": true
+    },
+    {
+      "id": "2",
+      "provider": "DriveEasy",
+      "vehicle": {
+        "make": "Honda",
+        "model": "CR-V",
+        "year": 2023,
+        "type": "SUV"
+      },
+      "pricePerDay": 65.00,
+      "location": {
+        "pickup": "LAX Airport",
+        "dropoff": "LAX Airport"
+      },
+      "features": ["Automatic", "AC", "GPS", "Bluetooth", "4WD"],
+      "available": true
+    },
+    {
+      "id": "3",
+      "provider": "Luxury Wheels",
+      "vehicle": {
+        "make": "BMW",
+        "model": "3 Series",
+        "year": 2023,
+        "type": "Luxury Sedan"
+      },
+      "pricePerDay": 120.00,
+      "location": {
+        "pickup": "LAX Airport",
+        "dropoff": "LAX Airport"
+      },
+      "features": ["Automatic", "AC", "GPS", "Bluetooth", "Leather Seats", "Sunroof"],
+      "available": true
+    }
+  ]
+}
+

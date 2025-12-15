@@ -1,0 +1,59 @@
+{
+  "flights": [
+    {
+      "id": "1",
+      "airline": "Airline A",
+      "departure": {
+        "airport": "JFK",
+        "city": "New York",
+        "time": "2024-01-15T08:00:00Z"
+      },
+      "arrival": {
+        "airport": "LAX",
+        "city": "Los Angeles",
+        "time": "2024-01-15T11:30:00Z"
+      },
+      "duration": "5h 30m",
+      "price": 299.99,
+      "stops": 0,
+      "class": "Economy"
+    },
+    {
+      "id": "2",
+      "airline": "Airline B",
+      "departure": {
+        "airport": "JFK",
+        "city": "New York",
+        "time": "2024-01-15T10:00:00Z"
+      },
+      "arrival": {
+        "airport": "LAX",
+        "city": "Los Angeles",
+        "time": "2024-01-15T14:15:00Z"
+      },
+      "duration": "6h 15m",
+      "price": 349.99,
+      "stops": 1,
+      "class": "Economy"
+    },
+    {
+      "id": "3",
+      "airline": "Airline C",
+      "departure": {
+        "airport": "JFK",
+        "city": "New York",
+        "time": "2024-01-15T06:30:00Z"
+      },
+      "arrival": {
+        "airport": "LAX",
+        "city": "Los Angeles",
+        "time": "2024-01-15T10:00:00Z"
+      },
+      "duration": "5h 30m",
+      "price": 279.99,
+      "stops": 0,
+      "class": "Economy"
+    }
+  ]
+}
+
