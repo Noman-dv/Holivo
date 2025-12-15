@@ -1,9 +1,8 @@
 'use client'
 
 // Global state management using React Context
-// This is a simple implementation. Consider using Zustand, Redux, or similar for production
 
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useCallback, useMemo } from 'react'
 
 const StoreContext = createContext()
 
@@ -29,26 +28,26 @@ export function StoreProvider({ children }) {
     cars: [],
   })
 
-  const updateFilters = (newFilters) => {
+  const updateFilters = useCallback((newFilters) => {
     setFilters(prev => ({ ...prev, ...newFilters }))
-  }
+  }, [])
 
-  const selectItem = (type, item) => {
+  const selectItem = useCallback((type, item) => {
     setSelectedItems(prev => ({ ...prev, [type]: item }))
-  }
+  }, [])
 
-  const updateSearchResults = (type, results) => {
+  const updateSearchResults = useCallback((type, results) => {
     setSearchResults(prev => ({ ...prev, [type]: results }))
-  }
+  }, [])
 
-  const value = {
+  const value = useMemo(() => ({
     filters,
     updateFilters,
     selectedItems,
     selectItem,
     searchResults,
     updateSearchResults,
-  }
+  }), [filters, selectedItems, searchResults, updateFilters, selectItem, updateSearchResults])
 
   return (
     <StoreContext.Provider value={value}>

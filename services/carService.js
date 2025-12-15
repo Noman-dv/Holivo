@@ -1,7 +1,8 @@
-// Placeholder service for car rental API integration
-// Replace mock data imports with actual API calls when backend is ready
+// Car rental API service
+// Switch between mock data and real API by changing USE_MOCK_DATA in lib/apiConfig.js
 
 import carsData from '../mock/cars.json'
+import { USE_MOCK_DATA, getApiUrl, API_ENDPOINTS } from '../lib/apiConfig'
 
 /**
  * Fetch car rentals based on search criteria
@@ -10,35 +11,41 @@ import carsData from '../mock/cars.json'
  */
 export const searchCars = async (searchParams = {}) => {
   try {
-    // TODO: Replace with actual API call
-    // Example: 
-    // const response = await fetch('/api/cars', { 
-    //   method: 'POST', 
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(searchParams) 
-    // })
-    // if (!response.ok) throw new Error('Failed to fetch cars')
-    // return await response.json()
-    
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500))
-    
-    // Filter mock data based on search params (basic implementation)
-    let results = carsData.cars
-    
-    if (searchParams.location) {
-      // Filter logic would go here
-      // Example: results = results.filter(car => 
-      //   car.location.pickup.toLowerCase().includes(searchParams.location.toLowerCase())
-      // )
+    if (USE_MOCK_DATA) {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
+      // Filter mock data based on search params
+      let results = carsData.cars
+      
+      if (searchParams.location) {
+        results = results.filter(car => 
+          car.location.pickup.toLowerCase().includes(searchParams.location.toLowerCase())
+        )
+      }
+      
+      if (searchParams.vehicleType) {
+        results = results.filter(car => car.vehicle.type === searchParams.vehicleType)
+      }
+      
+      return results
+    } else {
+      // Real API call
+      const response = await fetch(getApiUrl(API_ENDPOINTS.CARS.SEARCH), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(searchParams),
+      })
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch cars: ${response.statusText}`)
+      }
+      
+      const data = await response.json()
+      return data.cars || data
     }
-    
-    if (searchParams.vehicleType) {
-      // Filter logic would go here
-      // Example: results = results.filter(car => car.vehicle.type === searchParams.vehicleType)
-    }
-    
-    return results
   } catch (error) {
     console.error('Error searching cars:', error)
     throw error
@@ -52,20 +59,29 @@ export const searchCars = async (searchParams = {}) => {
  */
 export const getCarById = async (carId) => {
   try {
-    // TODO: Replace with actual API call
-    // Example: 
-    // const response = await fetch(`/api/cars/${carId}`)
-    // if (!response.ok) throw new Error('Car not found')
-    // return await response.json()
-    
-    await new Promise(resolve => setTimeout(resolve, 300))
-    
-    const car = carsData.cars.find(car => car.id === carId)
-    if (!car) {
-      throw new Error(`Car with ID ${carId} not found`)
+    if (USE_MOCK_DATA) {
+      await new Promise(resolve => setTimeout(resolve, 300))
+      
+      const car = carsData.cars.find(car => car.id === carId)
+      if (!car) {
+        throw new Error(`Car with ID ${carId} not found`)
+      }
+      return car
+    } else {
+      // Real API call
+      const response = await fetch(getApiUrl(API_ENDPOINTS.CARS.GET_BY_ID(carId)), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      
+      if (!response.ok) {
+        throw new Error(`Car not found: ${response.statusText}`)
+      }
+      
+      return await response.json()
     }
-    
-    return car
   } catch (error) {
     console.error('Error fetching car:', error)
     throw error
