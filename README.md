@@ -8,16 +8,29 @@ A Next.js-based travel comparison platform for comparing flights, hotels, and ca
 Holivo/
 ├── app/                    # Next.js App Router pages and layouts
 │   ├── layout.js          # Root layout with StoreProvider
-│   ├── page.js            # Home page
-│   └── globals.css        # Global styles with Tailwind
+│   ├── page.js            # Home page (/)
+│   ├── globals.css        # Global styles with Tailwind
+│   ├── flights/           # Flights routes
+│   │   └── page.js        # Flights search page (/flights)
+│   ├── hotels/            # Hotels routes
+│   │   └── page.js        # Hotels search page (/hotels)
+│   ├── cars/              # Car rentals routes
+│   │   └── page.js        # Car rentals search page (/cars)
+│   └── compare/           # Comparison routes
+│       └── page.js        # Compare selections page (/compare)
 ├── components/            # Reusable UI components
-│   ├── Button.js          # Button component
+│   ├── Button.js          # Button component with variants
 │   ├── Card.js            # Card component
-│   └── Layout.js          # Main layout wrapper
+│   ├── Layout.js          # Main layout wrapper
+│   ├── Navigation.js      # Navigation component with routing
+│   └── index.js           # Central component exports
+├── lib/                   # Utility libraries and constants
+│   └── routes.js          # Route constants and navigation config
 ├── services/              # API service placeholders
 │   ├── flightService.js   # Flight API service (mock)
 │   ├── hotelService.js    # Hotel API service (mock)
-│   └── carService.js      # Car rental API service (mock)
+│   ├── carService.js      # Car rental API service (mock)
+│   └── index.js           # Central service exports
 ├── mock/                  # Mock JSON data
 │   ├── flights.json       # Sample flight data
 │   ├── hotels.json        # Sample hotel data
@@ -65,13 +78,30 @@ npm start
 
 ## Features
 
-- ✅ Next.js 16 with App Router
-- ✅ Tailwind CSS for styling
-- ✅ Organized folder structure
-- ✅ Mock data for development
-- ✅ Service placeholders ready for API integration
+- ✅ Next.js 16 with App Router (JavaScript, no TypeScript)
+- ✅ Tailwind CSS v4 configured and working
+- ✅ Organized folder structure with clear separation of concerns
+- ✅ **Organized routing structure** with dedicated routes for each feature
+- ✅ **Navigation component** with active route highlighting
+- ✅ **Route constants** centralized for easy maintenance
+- ✅ Comprehensive mock data for development
+- ✅ Service placeholders with error handling ready for API integration
 - ✅ Global state management with React Context
-- ✅ Reusable UI components
+- ✅ Reusable UI components with proper prop validation
+- ✅ Centralized exports for cleaner imports
+- ✅ Professional code structure with JSDoc comments
+
+## Routes
+
+The application uses Next.js App Router with the following routes:
+
+- `/` - Home page with overview and quick links
+- `/flights` - Flight search and comparison page
+- `/hotels` - Hotel search and comparison page
+- `/cars` - Car rental search and comparison page
+- `/compare` - Compare selected flights, hotels, and car rentals
+
+All routes are organized in the `app/` directory following Next.js App Router conventions. Route constants are centralized in `lib/routes.js` for easy maintenance.
 
 ## Future Integration
 

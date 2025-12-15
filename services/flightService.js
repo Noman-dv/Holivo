@@ -8,22 +8,39 @@ import flightsData from '../mock/flights.json'
  * @param {Object} searchParams - Search parameters (origin, destination, date, etc.)
  * @returns {Promise<Array>} Array of flight options
  */
-export const searchFlights = async (searchParams) => {
-  // TODO: Replace with actual API call
-  // Example: const response = await fetch('/api/flights', { method: 'POST', body: JSON.stringify(searchParams) })
-  // return await response.json()
-  
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500))
-  
-  // Filter mock data based on search params (basic implementation)
-  let results = flightsData.flights
-  
-  if (searchParams.origin) {
-    // Filter logic would go here
+export const searchFlights = async (searchParams = {}) => {
+  try {
+    // TODO: Replace with actual API call
+    // Example: 
+    // const response = await fetch('/api/flights', { 
+    //   method: 'POST', 
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(searchParams) 
+    // })
+    // if (!response.ok) throw new Error('Failed to fetch flights')
+    // return await response.json()
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500))
+    
+    // Filter mock data based on search params (basic implementation)
+    let results = flightsData.flights
+    
+    if (searchParams.origin) {
+      // Filter logic would go here
+      // Example: results = results.filter(flight => flight.departure.airport === searchParams.origin)
+    }
+    
+    if (searchParams.destination) {
+      // Filter logic would go here
+      // Example: results = results.filter(flight => flight.arrival.airport === searchParams.destination)
+    }
+    
+    return results
+  } catch (error) {
+    console.error('Error searching flights:', error)
+    throw error
   }
-  
-  return results
 }
 
 /**
@@ -32,12 +49,24 @@ export const searchFlights = async (searchParams) => {
  * @returns {Promise<Object>} Flight details
  */
 export const getFlightById = async (flightId) => {
-  // TODO: Replace with actual API call
-  // Example: const response = await fetch(`/api/flights/${flightId}`)
-  // return await response.json()
-  
-  await new Promise(resolve => setTimeout(resolve, 300))
-  
-  return flightsData.flights.find(flight => flight.id === flightId) || null
+  try {
+    // TODO: Replace with actual API call
+    // Example: 
+    // const response = await fetch(`/api/flights/${flightId}`)
+    // if (!response.ok) throw new Error('Flight not found')
+    // return await response.json()
+    
+    await new Promise(resolve => setTimeout(resolve, 300))
+    
+    const flight = flightsData.flights.find(flight => flight.id === flightId)
+    if (!flight) {
+      throw new Error(`Flight with ID ${flightId} not found`)
+    }
+    
+    return flight
+  } catch (error) {
+    console.error('Error fetching flight:', error)
+    throw error
+  }
 }
 

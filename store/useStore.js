@@ -1,3 +1,5 @@
+'use client'
+
 // Global state management using React Context
 // This is a simple implementation. Consider using Zustand, Redux, or similar for production
 

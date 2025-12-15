@@ -1,4 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* 
+ * Global Styles - 100% Tailwind CSS
+ * This file only imports Tailwind CSS. All styling is done using Tailwind utility classes.
+ * No custom CSS should be added here.
+ */
+@import "tailwindcss";
 

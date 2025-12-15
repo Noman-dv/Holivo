@@ -1,11 +1,15 @@
+'use client'
+
 /**
  * Reusable Button Component
  * @param {Object} props - Component props
- * @param {string} props.variant - Button style variant (primary, secondary, outline)
- * @param {string} props.size - Button size (sm, md, lg)
+ * @param {'primary'|'secondary'|'outline'} props.variant - Button style variant
+ * @param {'sm'|'md'|'lg'} props.size - Button size
  * @param {React.ReactNode} props.children - Button content
  * @param {Function} props.onClick - Click handler
  * @param {boolean} props.disabled - Disabled state
+ * @param {string} props.className - Additional CSS classes
+ * @param {string} props.type - Button type (button, submit, reset)
  */
 export default function Button({ 
   variant = 'primary', 
@@ -14,14 +18,15 @@ export default function Button({
   onClick, 
   disabled = false,
   className = '',
+  type = 'button',
   ...props 
 }) {
-  const baseStyles = 'font-semibold rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2'
+  const baseStyles = 'font-semibold rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
   
   const variants = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-    secondary: 'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500',
-    outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50 focus:ring-blue-500',
+    primary: 'bg-teal-600 text-white hover:bg-teal-700 focus:ring-teal-500 shadow-md hover:shadow-lg',
+    secondary: 'bg-teal-600 text-white hover:bg-teal-700 focus:ring-teal-500 shadow-md hover:shadow-lg',
+    outline: 'border-2 border-teal-600 text-teal-600 hover:bg-teal-50 focus:ring-teal-500 hover:border-teal-700',
   }
   
   const sizes = {
@@ -30,11 +35,14 @@ export default function Button({
     lg: 'px-6 py-3 text-lg',
   }
   
-  const disabledStyles = disabled ? 'opacity-50 cursor-not-allowed' : ''
+  // Validate variant and size
+  const buttonVariant = variants[variant] || variants.primary
+  const buttonSize = sizes[size] || sizes.md
   
   return (
     <button
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${disabledStyles} ${className}`}
+      type={type}
+      className={`${baseStyles} ${buttonVariant} ${buttonSize} ${className}`.trim()}
       onClick={onClick}
       disabled={disabled}
       {...props}
