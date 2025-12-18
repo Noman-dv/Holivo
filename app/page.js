@@ -2,6 +2,7 @@ import Layout from '../components/Layout'
 import Card from '../components/Card'
 import Button from '../components/Button'
 import Link from 'next/link'
+import AiHolidayPrompt from '../components/AiHolidayPrompt'
 
 export const metadata = {
   title: 'Holivo - Travel Comparison Platform',
@@ -12,21 +13,56 @@ export default function Home() {
   return (
     <Layout>
       <div className="max-w-7xl mx-auto">
-        {/* Hero Section */}
-        <section className="text-center mb-12 md:mb-16 py-8 md:py-12">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-teal-600 mb-4 md:mb-6">
-            Plan Your Perfect Trip
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 mb-6 md:mb-8 max-w-3xl mx-auto">
-            Compare prices, find the best deals, and book everything you need for your next adventure—all in one place.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Link href="/flights" className="w-full sm:w-auto">
-              <Button variant="primary" size="md" className="w-full sm:w-auto">Start Planning</Button>
-            </Link>
-            <Link href="/compare" className="w-full sm:w-auto">
-              <Button variant="outline" size="md" className="w-full sm:w-auto">Compare Deals</Button>
-            </Link>
+        {/* Hero Section with AI helper entry point */}
+        <section className="mb-10 md:mb-14 py-8 md:py-10">
+          <div className="text-center mb-6 md:mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-teal-600 mb-3 md:mb-4">
+              Where to next with Holivo?
+            </h1>
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+              Start with stays, flights, or let our AI-style helper suggest holiday ideas using mock
+              data that will later be powered by live partner prices.
+            </p>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)] items-start">
+            <Card className="border-teal-200">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-teal-700 font-semibold">
+                    Quick search
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    Jump straight into flights or stays to explore the Booking.com-style layouts.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2 justify-start md:justify-end">
+                  <Link href="/flights">
+                    <Button variant="primary" size="sm">Search flights</Button>
+                  </Link>
+                  <Link href="/hotels">
+                    <Button variant="outline" size="sm">Search stays</Button>
+                  </Link>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500">
+                All results are mock-only for this phase. In production, selecting a deal will take
+                you to our partner sites to complete your booking.
+              </p>
+            </Card>
+
+            <Card className="border-teal-200 bg-gradient-to-br from-teal-50 to-white">
+              <div className="flex flex-col gap-3">
+                <p className="text-xs uppercase tracking-wide text-teal-700 font-semibold">
+                  New · AI holiday helper
+                </p>
+                <p className="text-sm text-gray-700">
+                  Prefer to start with an idea instead of dates and destinations? Describe your ideal
+                  break and we&apos;ll show AI-style mock matches.
+                </p>
+                <AiHolidayPrompt />
+              </div>
+            </Card>
           </div>
         </section>
 
@@ -81,8 +117,11 @@ export default function Home() {
             </div>
             <div className="text-center transition-transform duration-300 hover:scale-105">
               <div className="text-4xl mb-4 transition-transform duration-300 hover:scale-110">🔒</div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Secure Booking</h3>
-              <p className="text-sm text-gray-600">Your information is safe with our secure booking system</p>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Secure redirect</h3>
+              <p className="text-sm text-gray-600">
+                We&apos;ll send you to trusted partner sites over secure connections to complete your
+                booking.
+              </p>
             </div>
             <div className="text-center transition-transform duration-300 hover:scale-105">
               <div className="text-4xl mb-4 transition-transform duration-300 hover:scale-110">🌍</div>
@@ -115,8 +154,11 @@ export default function Home() {
               <div className="w-16 h-16 bg-teal-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 transition-all duration-300 hover:bg-teal-700 hover:scale-110 hover:shadow-lg">
                 3
               </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-3">Book</h3>
-              <p className="text-gray-600">Select your preferred option and complete your booking securely</p>
+              <h3 className="text-xl font-semibold text-gray-800 mb-3">Go to partner</h3>
+              <p className="text-gray-600">
+                Select your preferred option on Holivo, then complete your booking on a trusted
+                partner site.
+              </p>
             </div>
           </div>
         </section>
@@ -160,7 +202,10 @@ export default function Home() {
                 <div className="text-3xl transition-transform duration-300 hover:scale-110">📱</div>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-800 mb-2">Mobile Friendly</h3>
-                  <p className="text-gray-600">Plan and book your trip from anywhere, on any device, at any time.</p>
+                  <p className="text-gray-600">
+                    Plan your trip from anywhere, on any device, then jump to partner sites to
+                    finalise the booking.
+                  </p>
                 </div>
               </div>
             </Card>
@@ -190,7 +235,8 @@ export default function Home() {
           <Card className="bg-gradient-to-br from-teal-50 to-teal-100 border-teal-300 text-center py-8 md:py-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-teal-800 mb-3 md:mb-4">Ready to Start Your Journey?</h2>
             <p className="text-base sm:text-lg text-gray-700 mb-6 md:mb-8 max-w-2xl mx-auto">
-              Compare prices, find the best deals, and book your perfect trip today. Your next adventure is just a click away.
+              Compare prices and find the best deals today. When you&apos;re ready, view booking
+              options on partner sites with a single click.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
               <Link href="/flights" className="w-full sm:w-auto">

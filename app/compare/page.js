@@ -45,14 +45,17 @@ export default function ComparePage() {
           </Card>
         </div>
 
-        <Card className="bg-teal-50 border-teal-200">
+          <Card className="bg-teal-50 border-teal-200">
           <h3 className="text-lg sm:text-xl font-semibold mb-3 md:mb-4 text-teal-800">Total Price</h3>
           <p className="text-2xl sm:text-3xl font-bold text-teal-600 mb-3 md:mb-4">$0.00</p>
           <p className="text-sm sm:text-base text-gray-600 mb-4">
-            Select flights, hotels, and car rentals to see your total trip cost
+            Select flights, hotels, and car rentals to see a combined mock trip cost before you jump
+            out to partner sites to complete your booking.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <Button variant="primary" disabled className="w-full sm:w-auto">Complete Booking</Button>
+            <Button variant="primary" disabled className="w-full sm:w-auto">
+              View booking options
+            </Button>
             <Link href="/" className="w-full sm:w-auto">
               <Button variant="outline" className="w-full sm:w-auto">Back to Home</Button>
             </Link>

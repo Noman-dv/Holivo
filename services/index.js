@@ -4,4 +4,5 @@
 export * from './flightService'
 export * from './hotelService'
 export * from './carService'
+export * from './aiHolidayService'
 

@@ -1,0 +1,106 @@
+{
+  "aiHolidays": [
+    {
+      "id": "ai-1",
+      "title": "Weekend escape to Lahore with rooftop views",
+      "destination": "Lahore, Pakistan",
+      "theme": "City break",
+      "nights": 2,
+      "estimatedBudget": 125,
+      "badge": "Best match",
+      "summary": "A short, budget-friendly city escape with a centrally located hotel and evening food street walks.",
+      "highlights": [
+        "Central location near major attractions",
+        "Breakfast included",
+        "Flexible mock flight options from LHE"
+      ],
+      "image": "https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg",
+      "propertyType": "Hotel",
+      "rating": 8.5,
+      "amenities": ["Free WiFi", "Breakfast included", "Parking"],
+      "distanceFromCenterKm": 1.2
+    },
+    {
+      "id": "ai-2",
+      "title": "Family-friendly beach break in Karachi",
+      "destination": "Karachi, Pakistan",
+      "theme": "Family beach",
+      "nights": 3,
+      "estimatedBudget": 215,
+      "badge": "Family favourite",
+      "summary": "Stay close to the seaside with easy access to restaurants and kid-friendly spaces.",
+      "highlights": [
+        "Near the beach",
+        "Family rooms available",
+        "Mock airport transfers included"
+      ],
+      "image": "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg",
+      "propertyType": "Resort",
+      "rating": 9.2,
+      "amenities": ["Free WiFi", "Pool", "Breakfast included"],
+      "distanceFromCenterKm": 5.5
+    },
+    {
+      "id": "ai-3",
+      "title": "Budget Umrah connection via Jeddah",
+      "destination": "Jeddah, Saudi Arabia",
+      "theme": "Religious trip",
+      "nights": 4,
+      "estimatedBudget": 340,
+      "badge": "Budget-friendly",
+      "summary": "Mock routing that pairs budget flights from Lahore to Jeddah with a simple, clean hotel stay.",
+      "highlights": [
+        "Near airport for easy onward travel",
+        "Simple, clean accommodation",
+        "Optimised for lower total cost"
+      ],
+      "image": "https://images.pexels.com/photos/460376/pexels-photo-460376.jpeg",
+      "propertyType": "Hotel",
+      "rating": 7.8,
+      "amenities": ["Free WiFi", "Parking"],
+      "distanceFromCenterKm": 8.0
+    },
+    {
+      "id": "ai-4",
+      "title": "Luxury apartment stay in Dubai",
+      "destination": "Dubai, United Arab Emirates",
+      "theme": "City break",
+      "nights": 5,
+      "estimatedBudget": 430,
+      "badge": "Premium",
+      "summary": "Modern apartment in the heart of Dubai with stunning city views and premium amenities.",
+      "highlights": [
+        "Prime downtown location",
+        "Full kitchen facilities",
+        "Rooftop pool access"
+      ],
+      "image": "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+      "propertyType": "Apartment",
+      "rating": 9.5,
+      "amenities": ["Free WiFi", "Pool", "Breakfast included", "Parking"],
+      "distanceFromCenterKm": 0.8
+    },
+    {
+      "id": "ai-5",
+      "title": "Cozy guesthouse in Islamabad",
+      "destination": "Islamabad, Pakistan",
+      "theme": "City break",
+      "nights": 2,
+      "estimatedBudget": 90,
+      "badge": "Budget-friendly",
+      "summary": "Charming guesthouse offering comfortable accommodation at an affordable price.",
+      "highlights": [
+        "Quiet neighborhood",
+        "Home-cooked breakfast",
+        "Close to markets"
+      ],
+      "image": "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg",
+      "propertyType": "Guesthouse",
+      "rating": 8.0,
+      "amenities": ["Free WiFi", "Breakfast included"],
+      "distanceFromCenterKm": 3.2
+    }
+  ]
+}
+
+

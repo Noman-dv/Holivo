@@ -13,7 +13,9 @@
       },
       "rating": 4.5,
       "pricePerNight": 150.00,
-      "amenities": ["WiFi", "Pool", "Gym", "Spa"],
+      "propertyType": "Hotel",
+      "distanceFromCenterKm": 0.8,
+      "amenities": ["Free WiFi", "Pool", "Gym", "Spa", "Parking", "Breakfast included"],
       "image": "https://via.placeholder.com/400x300",
       "available": true
     },
@@ -30,7 +32,17 @@
       },
       "rating": 4.8,
       "pricePerNight": 220.00,
-      "amenities": ["WiFi", "Pool", "Beach Access", "Restaurant", "Spa"],
+      "propertyType": "Resort",
+      "distanceFromCenterKm": 3.2,
+      "amenities": [
+        "Free WiFi",
+        "Pool",
+        "Beach access",
+        "Restaurant",
+        "Spa",
+        "Breakfast included",
+        "Parking"
+      ],
       "image": "https://via.placeholder.com/400x300",
       "available": true
     },
@@ -47,7 +59,28 @@
       },
       "rating": 4.2,
       "pricePerNight": 120.00,
-      "amenities": ["WiFi", "Gym", "Restaurant"],
+      "propertyType": "Apartment",
+      "distanceFromCenterKm": 0.4,
+      "amenities": ["Free WiFi", "Kitchen", "Gym", "Parking"],
+      "image": "https://via.placeholder.com/400x300",
+      "available": true
+    },
+    {
+      "id": "4",
+      "name": "Gulberg Guesthouse",
+      "location": {
+        "city": "Lahore",
+        "address": "Gulberg Main Boulevard",
+        "coordinates": {
+          "lat": 31.5204,
+          "lng": 74.3587
+        }
+      },
+      "rating": 4.0,
+      "pricePerNight": 80.00,
+      "propertyType": "Guesthouse",
+      "distanceFromCenterKm": 2.5,
+      "amenities": ["Free WiFi", "Breakfast included", "Parking"],
       "image": "https://via.placeholder.com/400x300",
       "available": true
     }

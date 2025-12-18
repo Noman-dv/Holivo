@@ -1,27 +1,23 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import Layout from '../../components/Layout'
 import Card from '../../components/Card'
-import Button from '../../components/Button'
 import Link from 'next/link'
 import { searchFlights } from '../../services/flightService'
 import { useStore } from '../../store/useStore'
+import SearchBar from '../../components/SearchBar'
+import FilterSidebar from '../../components/FilterSidebar'
+import FlightResultCard from '../../components/FlightResultCard'
 
 export default function FlightsPage() {
-  const { searchResults, updateSearchResults } = useStore()
+  const { filters, searchResults, updateSearchResults } = useStore()
   const [loading, setLoading] = useState(false)
-  const [searchParams, setSearchParams] = useState({
-    origin: '',
-    destination: '',
-    departureDate: '',
-    passengers: 1,
-  })
+  const [sidebarFilters, setSidebarFilters] = useState({})
   const hasLoadedRef = useRef(false)
 
   // Load mock results on component mount (only once)
   useEffect(() => {
-    // Only load if flights haven't been loaded yet
     if (!hasLoadedRef.current && (!searchResults.flights || searchResults.flights.length === 0)) {
       hasLoadedRef.current = true
       const loadMockFlights = async () => {
@@ -37,15 +33,18 @@ export default function FlightsPage() {
       }
       loadMockFlights()
     }
-  }, []) // Empty dependency array - only run once on mount
+  }, [searchResults.flights, updateSearchResults])
 
-  const handleSearch = async (e) => {
-    e.preventDefault()
-    if (loading) return // Prevent multiple simultaneous searches
-    
+  const handleSearch = async (currentFilters) => {
+    if (loading) return
+
     setLoading(true)
     try {
-      const results = await searchFlights(searchParams)
+      const results = await searchFlights({
+        origin: currentFilters.origin,
+        destination: currentFilters.destination,
+        departureDate: currentFilters.departureDate,
+      })
       updateSearchResults('flights', results)
     } catch (error) {
       console.error('Error searching flights:', error)
@@ -54,177 +53,234 @@ export default function FlightsPage() {
     }
   }
 
-  const formatTime = (timeString) => {
-    const date = new Date(timeString)
-    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
-  }
+  const filteredFlights = useMemo(() => {
+    let results = searchResults.flights || []
 
-  const formatDate = (timeString) => {
-    const date = new Date(timeString)
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-  }
+    if (sidebarFilters.stops && sidebarFilters.stops !== 'any') {
+      if (sidebarFilters.stops === 'nonstop') {
+        results = results.filter((flight) => flight.stops === 0)
+      } else if (sidebarFilters.stops === '1') {
+        results = results.filter((flight) => flight.stops === 1)
+      } else if (sidebarFilters.stops === '2plus') {
+        results = results.filter((flight) => flight.stops >= 2)
+      }
+    }
+
+    if (sidebarFilters.maxPrice) {
+      const maxPrice = Number(sidebarFilters.maxPrice)
+      results = results.filter((flight) => flight.price <= maxPrice)
+    }
+
+    if (
+      Array.isArray(sidebarFilters.departureAirports) &&
+      sidebarFilters.departureAirports.length > 0
+    ) {
+      results = results.filter((flight) =>
+        sidebarFilters.departureAirports.includes(flight?.departure?.airport)
+      )
+    }
+
+    if (
+      Array.isArray(sidebarFilters.arrivalAirports) &&
+      sidebarFilters.arrivalAirports.length > 0
+    ) {
+      results = results.filter((flight) =>
+        sidebarFilters.arrivalAirports.includes(flight?.arrival?.airport)
+      )
+    }
+
+    if (sidebarFilters.timeOfDay && sidebarFilters.timeOfDay !== 'any') {
+      results = results.filter((flight) => {
+        const departureTime = flight?.departure?.time
+        if (!departureTime) return true
+        const date = new Date(departureTime)
+        const hour = date.getHours()
+
+        if (sidebarFilters.timeOfDay === 'morning') {
+          return hour >= 5 && hour < 12
+        }
+        if (sidebarFilters.timeOfDay === 'afternoon') {
+          return hour >= 12 && hour < 18
+        }
+        if (sidebarFilters.timeOfDay === 'evening') {
+          return hour >= 18 && hour < 23
+        }
+        if (sidebarFilters.timeOfDay === 'night') {
+          return hour >= 23 || hour < 5
+        }
+        return true
+      })
+    }
+
+    if (Array.isArray(sidebarFilters.airlines) && sidebarFilters.airlines.length > 0) {
+      results = results.filter((flight) => sidebarFilters.airlines.includes(flight.airline))
+    }
+
+    if (sidebarFilters.maxDurationHours) {
+      const maxMinutes = Number(sidebarFilters.maxDurationHours) * 60
+      const parseDurationToMinutes = (duration) => {
+        if (!duration || typeof duration !== 'string') return Infinity
+        const match = duration.match(/(\d+)\s*h\s*(\d+)?/i)
+        if (!match) return Infinity
+        const hours = parseInt(match[1], 10) || 0
+        const mins = parseInt(match[2] || '0', 10) || 0
+        return hours * 60 + mins
+      }
+
+      results = results.filter((flight) => parseDurationToMinutes(flight.duration) <= maxMinutes)
+    }
+
+    return results
+  }, [searchResults.flights, sidebarFilters])
+
+  const airlineOptions = useMemo(() => {
+    const list = searchResults.flights || []
+    const set = new Set()
+    list.forEach((flight) => {
+      if (flight.airline) {
+        set.add(flight.airline)
+      }
+    })
+    return Array.from(set)
+  }, [searchResults.flights])
+
+  const airportOptions = useMemo(() => {
+    const list = searchResults.flights || []
+    const depMap = new Map()
+    const arrMap = new Map()
+
+    list.forEach((flight) => {
+      const depCode = flight?.departure?.airport
+      const depCity = flight?.departure?.city
+      if (depCode) {
+        if (!depMap.has(depCode)) {
+          depMap.set(depCode, { code: depCode, city: depCity || depCode, count: 0 })
+        }
+        depMap.get(depCode).count += 1
+      }
+
+      const arrCode = flight?.arrival?.airport
+      const arrCity = flight?.arrival?.city
+      if (arrCode) {
+        if (!arrMap.has(arrCode)) {
+          arrMap.set(arrCode, { code: arrCode, city: arrCity || arrCode, count: 0 })
+        }
+        arrMap.get(arrCode).count += 1
+      }
+    })
+
+    return {
+      departure: Array.from(depMap.values()),
+      arrival: Array.from(arrMap.values()),
+    }
+  }, [searchResults.flights])
+
+  const totalFlights = searchResults.flights?.length || 0
 
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-6 md:mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-teal-600 mb-2 md:mb-4">Search Flights</h1>
-          <p className="text-base sm:text-lg text-gray-600">
-            Compare flight prices and find the best deals for your next trip
+      <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
+        {/* Hero / intro */}
+        <section className="space-y-3">
+          <p className="text-xs uppercase tracking-wide text-slate-500">Flights</p>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900">
+            Search hundreds of flight sites at once
+          </h1>
+          <p className="text-sm sm:text-base text-slate-600 max-w-2xl">
+            Use mock results to explore how Holivo will compare real-time flight prices from our
+            partner sites in the next phase.
           </p>
-        </div>
+        </section>
 
-        {/* Search Form */}
-        <Card className="mb-8 border-teal-200">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-800">Flight Search</h2>
-          <form onSubmit={handleSearch} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  From
-                </label>
-                <input
-                  type="text"
-                  placeholder="City or Airport"
-                  value={searchParams.origin}
-                  onChange={(e) => setSearchParams({ ...searchParams, origin: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  To
-                </label>
-                <input
-                  type="text"
-                  placeholder="City or Airport"
-                  value={searchParams.destination}
-                  onChange={(e) => setSearchParams({ ...searchParams, destination: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Departure Date
-                </label>
-                <input
-                  type="date"
-                  value={searchParams.departureDate}
-                  onChange={(e) => setSearchParams({ ...searchParams, departureDate: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Passengers
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  max="9"
-                  value={searchParams.passengers}
-                  onChange={(e) => setSearchParams({ ...searchParams, passengers: parseInt(e.target.value) || 1 })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <Button type="submit" variant="primary" disabled={loading} className="w-full sm:w-auto">
-                {loading ? 'Searching...' : 'Search Flights'}
-              </Button>
-              <Link href="/" className="w-full sm:w-auto">
-                <Button variant="outline" className="w-full sm:w-auto">Back to Home</Button>
-              </Link>
-            </div>
-          </form>
-        </Card>
+        {/* Shared search bar */}
+        <SearchBar mode="flights" onSearch={handleSearch} loading={loading} />
 
-        {/* Results Section */}
-        {loading && (
-          <Card className="mb-8 border-teal-200">
-            <div className="text-center py-8">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
-              <p className="mt-2 text-gray-600">Loading flights...</p>
-            </div>
-          </Card>
-        )}
-
-        {!loading && searchResults.flights && searchResults.flights.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
-              Available Flights ({searchResults.flights.length})
-            </h2>
-            <div className="space-y-4">
-              {searchResults.flights.map((flight) => (
-                <Card key={flight.id} className="border-teal-200 hover:border-teal-400 transition-colors">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex flex-wrap items-center gap-2 sm:gap-4 mb-2">
-                        <span className="text-base sm:text-lg font-semibold text-teal-600">{flight.airline}</span>
-                        <span className="text-xs sm:text-sm text-gray-500">{flight.class}</span>
-                        {flight.stops === 0 && (
-                          <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Direct</span>
-                        )}
-                        {flight.stops > 0 && (
-                          <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
-                            {flight.stops} Stop{flight.stops > 1 ? 's' : ''}
-                          </span>
-                        )}
-                      </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 text-xs sm:text-sm">
-                        <div>
-                          <p className="text-gray-500">Departure</p>
-                          <p className="font-semibold text-gray-800">{formatTime(flight.departure.time)}</p>
-                          <p className="text-gray-600">{flight.departure.airport}</p>
-                          <p className="text-gray-500 text-xs">{flight.departure.city}</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-500">Duration</p>
-                          <p className="font-semibold text-gray-800">{flight.duration}</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-500">Arrival</p>
-                          <p className="font-semibold text-gray-800">{formatTime(flight.arrival.time)}</p>
-                          <p className="text-gray-600">{flight.arrival.airport}</p>
-                          <p className="text-gray-500 text-xs">{flight.arrival.city}</p>
-                        </div>
-                        <div>
-                          <p className="text-gray-500">Date</p>
-                          <p className="font-semibold text-gray-800">{formatDate(flight.departure.time)}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col sm:flex-row md:flex-col items-start sm:items-center md:items-end gap-2 md:min-w-[140px]">
-                      <div className="text-left sm:text-center md:text-right">
-                        <p className="text-xl sm:text-2xl font-bold text-teal-600">${flight.price.toFixed(2)}</p>
-                        <p className="text-xs text-gray-500">per person</p>
-                      </div>
-                      <Button variant="primary" size="sm" className="w-full sm:w-auto md:w-full">
-                        Select Flight
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
+        {/* Results + filters layout */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-start">
+          <div className="md:col-span-4 lg:col-span-3">
+            <FilterSidebar
+              mode="flights"
+              onChange={setSidebarFilters}
+              flightOptions={{
+                airlines: airlineOptions,
+                departureAirports: airportOptions.departure,
+                arrivalAirports: airportOptions.arrival,
+                totalCount: totalFlights,
+                filteredCount: filteredFlights.length,
+              }}
+            />
           </div>
-        )}
 
-        {!loading && (!searchResults.flights || searchResults.flights.length === 0) && (
-          <Card className="bg-teal-50 border-teal-200">
-            <h3 className="text-xl font-semibold mb-2 text-teal-800">How it works</h3>
-            <ul className="list-disc list-inside text-gray-700 space-y-2">
-              <li>Enter your departure and destination cities</li>
-              <li>Select your travel dates</li>
-              <li>Choose number of passengers</li>
-              <li>Compare prices from multiple airlines</li>
-              <li>Book your preferred flight</li>
-            </ul>
-          </Card>
-        )}
+          <div className="space-y-4 md:col-span-8 lg:col-span-9">
+            {/* Summary + sort bar */}
+            <Card className="border-slate-200">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold text-slate-800">
+                    {filteredFlights.length > 0
+                      ? `${filteredFlights.length} mock flights found`
+                      : 'No flights match your current filters'}
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    Showing sample data only. In production, you&apos;ll see live prices from
+                    partner sites.
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 text-xs">
+                  <span className="text-slate-500">Sort by:</span>
+                  <button className="px-3 py-1.5 rounded-full bg-teal-600 text-white font-semibold">
+                    Best
+                  </button>
+                  <button className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700">
+                    Cheapest
+                  </button>
+                  <button className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700">
+                    Quickest
+                  </button>
+                </div>
+              </div>
+            </Card>
+
+            {/* Loading state */}
+            {loading && (
+              <Card className="border-slate-200">
+                <div className="text-center py-8">
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
+                  <p className="mt-2 text-slate-600 text-sm">Loading mock flights…</p>
+                </div>
+              </Card>
+            )}
+
+            {/* Results list */}
+            {!loading && filteredFlights.length > 0 && (
+              <div className="space-y-3">
+                {filteredFlights.map((flight) => (
+                  <FlightResultCard key={flight.id} flight={flight} />
+                ))}
+              </div>
+            )}
+
+            {/* Empty state */}
+            {!loading && (!searchResults.flights || searchResults.flights.length === 0) && (
+              <Card className="bg-teal-50 border-teal-200">
+                <h3 className="text-lg font-semibold mb-2 text-teal-800">Try a mock search</h3>
+                <ul className="list-disc list-inside text-slate-700 space-y-1 text-sm mb-3">
+                  <li>Start from New York (JFK) to Los Angeles (LAX).</li>
+                  <li>Adjust filters on the left to see how the layout responds.</li>
+                  <li>
+                    In a future phase, these results will redirect you to partner sites to complete
+                    your booking.
+                  </li>
+                </ul>
+                <Link href="/" className="text-xs text-teal-700 underline">
+                  Back to home
+                </Link>
+              </Card>
+            )}
+          </div>
+        </section>
       </div>
     </Layout>
   )
 }
+

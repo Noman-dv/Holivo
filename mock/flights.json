@@ -4,14 +4,14 @@
       "id": "1",
       "airline": "Airline A",
       "departure": {
-        "airport": "JFK",
-        "city": "New York",
-        "time": "2024-01-15T08:00:00Z"
+        "airport": "LHE",
+        "city": "Lahore",
+        "time": "2024-01-15T05:30:00Z"
       },
       "arrival": {
-        "airport": "LAX",
-        "city": "Los Angeles",
-        "time": "2024-01-15T11:30:00Z"
+        "airport": "JED",
+        "city": "Jeddah",
+        "time": "2024-01-15T10:00:00Z"
       },
       "duration": "5h 30m",
       "price": 299.99,
@@ -22,16 +22,16 @@
       "id": "2",
       "airline": "Airline B",
       "departure": {
-        "airport": "JFK",
-        "city": "New York",
-        "time": "2024-01-15T10:00:00Z"
+        "airport": "LHE",
+        "city": "Lahore",
+        "time": "2024-01-15T13:15:00Z"
       },
       "arrival": {
-        "airport": "LAX",
-        "city": "Los Angeles",
-        "time": "2024-01-15T14:15:00Z"
+        "airport": "JED",
+        "city": "Jeddah",
+        "time": "2024-01-15T18:45:00Z"
       },
-      "duration": "6h 15m",
+      "duration": "5h 30m",
       "price": 349.99,
       "stops": 1,
       "class": "Economy"
@@ -40,19 +40,73 @@
       "id": "3",
       "airline": "Airline C",
       "departure": {
-        "airport": "JFK",
-        "city": "New York",
-        "time": "2024-01-15T06:30:00Z"
+        "airport": "LHE",
+        "city": "Lahore",
+        "time": "2024-01-15T21:30:00Z"
       },
       "arrival": {
-        "airport": "LAX",
-        "city": "Los Angeles",
-        "time": "2024-01-15T10:00:00Z"
+        "airport": "JED",
+        "city": "Jeddah",
+        "time": "2024-01-16T03:00:00Z"
       },
       "duration": "5h 30m",
       "price": 279.99,
       "stops": 0,
       "class": "Economy"
+    },
+    {
+      "id": "4",
+      "airline": "Fly Jinnah",
+      "departure": {
+        "airport": "LHE",
+        "city": "Lahore",
+        "time": "2024-01-16T09:00:00Z"
+      },
+      "arrival": {
+        "airport": "DXB",
+        "city": "Dubai",
+        "time": "2024-01-16T13:00:00Z"
+      },
+      "duration": "4h 00m",
+      "price": 320.0,
+      "stops": 0,
+      "class": "Economy"
+    },
+    {
+      "id": "5",
+      "airline": "SAUDIA",
+      "departure": {
+        "airport": "ISB",
+        "city": "Islamabad",
+        "time": "2024-01-16T16:30:00Z"
+      },
+      "arrival": {
+        "airport": "JED",
+        "city": "Jeddah",
+        "time": "2024-01-16T22:00:00Z"
+      },
+      "duration": "5h 30m",
+      "price": 410.5,
+      "stops": 0,
+      "class": "Economy"
+    },
+    {
+      "id": "6",
+      "airline": "Emirates",
+      "departure": {
+        "airport": "LHE",
+        "city": "Lahore",
+        "time": "2024-01-17T00:30:00Z"
+      },
+      "arrival": {
+        "airport": "DXB",
+        "city": "Dubai",
+        "time": "2024-01-17T04:30:00Z"
+      },
+      "duration": "4h 00m",
+      "price": 450.0,
+      "stops": 1,
+      "class": "Business"
     }
   ]
 }

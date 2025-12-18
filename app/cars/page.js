@@ -215,7 +215,7 @@ export default function CarsPage() {
               <li>Filter by vehicle type, size, and features</li>
               <li>Compare prices from multiple rental companies</li>
               <li>View vehicle details and specifications</li>
-              <li>Book your rental car in advance</li>
+              <li>Open partner sites to reserve your rental car</li>
             </ul>
           </Card>
         )}
