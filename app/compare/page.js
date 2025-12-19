@@ -2,6 +2,7 @@ import Layout from '../../components/Layout'
 import Card from '../../components/Card'
 import Button from '../../components/Button'
 import Link from 'next/link'
+import { formatPriceWithCurrency } from '../../lib/currency'
 
 export const metadata = {
   title: 'Compare - Holivo',
@@ -47,7 +48,7 @@ export default function ComparePage() {
 
           <Card className="bg-teal-50 border-teal-200">
           <h3 className="text-lg sm:text-xl font-semibold mb-3 md:mb-4 text-teal-800">Total Price</h3>
-          <p className="text-2xl sm:text-3xl font-bold text-teal-600 mb-3 md:mb-4">$0.00</p>
+          <p className="text-2xl sm:text-3xl font-bold text-teal-600 mb-3 md:mb-4">{formatPriceWithCurrency(0)}</p>
           <p className="text-sm sm:text-base text-gray-600 mb-4">
             Select flights, hotels, and car rentals to see a combined mock trip cost before you jump
             out to partner sites to complete your booking.

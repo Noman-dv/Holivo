@@ -1,5 +1,6 @@
 import Card from './Card'
 import Button from './Button'
+import { formatPriceWithCurrency } from '../lib/currency'
 
 /**
  * Rich flight result card inspired by Booking.com / Kayak layouts.
@@ -28,7 +29,9 @@ export default function FlightResultCard({ flight }) {
             <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
               {flight.airline}
             </span>
-            <span className="text-xs text-slate-500">{flight.class || 'Economy'}</span>
+            <span className="text-[11px] font-medium bg-purple-50 text-purple-700 px-2 py-1 rounded-full border border-purple-100">
+              {flight.class || 'Economy'}
+            </span>
             {isNonstop ? (
               <span className="text-[11px] font-medium bg-green-50 text-green-700 px-2 py-1 rounded-full border border-green-100">
                 Nonstop
@@ -71,7 +74,7 @@ export default function FlightResultCard({ flight }) {
 
         <div className="flex flex-row lg:flex-col items-end gap-3 lg:min-w-[160px]">
           <div className="text-right">
-            <p className="text-xl sm:text-2xl font-bold text-teal-600">${flight.price.toFixed(2)}</p>
+            <p className="text-xl sm:text-2xl font-bold text-teal-600">{formatPriceWithCurrency(flight.price)}</p>
             <p className="text-[11px] text-slate-500">per person • redirects to partner site</p>
           </div>
           <Button variant="primary" size="sm" className="w-full lg:w-auto whitespace-nowrap">

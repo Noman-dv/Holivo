@@ -15,8 +15,8 @@ export default function AiHolidayPrompt() {
   const [prompt, setPrompt] = useState(filters.aiBrief || '')
 
   const examplePrompts = [
-    '3-day budget trip from Lahore under USD 150 for two people',
-    'Anywhere warm in March for under USD 350',
+    '3-day budget trip from Lahore under £150 for two people',
+    'Anywhere warm in March for under £350',
     'Romantic weekend beach break within 3 hours flight',
   ]
 
@@ -39,7 +39,7 @@ export default function AiHolidayPrompt() {
         rows={2}
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
-        placeholder="Example: 4-night family trip from Lahore in January, near the beach, under USD 300 per person."
+        placeholder="Example: 4-night family trip from Lahore in January, near the beach, under £300 per person."
         className="w-full px-3 py-2 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm resize-vertical"
       />
       <div className="flex flex-col sm:flex-row gap-2 sm:items-center">

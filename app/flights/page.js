@@ -197,7 +197,7 @@ export default function FlightsPage() {
 
         {/* Results + filters layout */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 items-start">
-          <div className="md:col-span-4 lg:col-span-3">
+          <div className="md:col-span-4 lg:col-span-3 order-2 md:order-1">
             <FilterSidebar
               mode="flights"
               onChange={setSidebarFilters}
@@ -211,7 +211,7 @@ export default function FlightsPage() {
             />
           </div>
 
-          <div className="space-y-4 md:col-span-8 lg:col-span-9">
+          <div className="space-y-4 md:col-span-8 lg:col-span-9 order-1 md:order-2">
             {/* Summary + sort bar */}
             <Card className="border-slate-200">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
@@ -228,13 +228,13 @@ export default function FlightsPage() {
                 </div>
                 <div className="flex flex-wrap items-center gap-2 text-xs">
                   <span className="text-slate-500">Sort by:</span>
-                  <button className="px-3 py-1.5 rounded-full bg-teal-600 text-white font-semibold">
+                  <button className="px-3 py-1.5 rounded-full bg-teal-600 text-white font-semibold transition-colors">
                     Best
                   </button>
-                  <button className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700">
+                  <button className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
                     Cheapest
                   </button>
-                  <button className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700">
+                  <button className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
                     Quickest
                   </button>
                 </div>

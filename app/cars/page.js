@@ -7,6 +7,7 @@ import Button from '../../components/Button'
 import Link from 'next/link'
 import { searchCars } from '../../services/carService'
 import { useStore } from '../../store/useStore'
+import { formatPriceWithCurrency } from '../../lib/currency'
 
 export default function CarsPage() {
   const { searchResults, updateSearchResults } = useStore()
@@ -193,7 +194,7 @@ export default function CarsPage() {
                     </div>
                     <div className="flex flex-col sm:flex-row md:flex-col items-start sm:items-center md:items-end gap-2 md:min-w-[150px]">
                       <div className="text-left sm:text-center md:text-right">
-                        <p className="text-xl sm:text-2xl font-bold text-teal-600">${car.pricePerDay.toFixed(2)}</p>
+                        <p className="text-xl sm:text-2xl font-bold text-teal-600">{formatPriceWithCurrency(car.pricePerDay)}</p>
                         <p className="text-xs text-gray-500">per day</p>
                       </div>
                       <Button variant="primary" size="sm" className="w-full sm:w-auto md:w-full">

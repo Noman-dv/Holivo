@@ -1,6 +1,7 @@
  'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { formatPriceWithCurrency, CURRENCIES } from '../lib/currency'
 
 /**
  * Budget range slider component with histogram visualization
@@ -109,8 +110,8 @@ function BudgetRangeSlider({ minPrice, maxPrice, onMinChange, onMaxChange }) {
   }, [isDragging, handleMouseMove, handleMouseUp])
 
   const formatPrice = (value) => {
-    if (value >= MAX_BUDGET) return 'USD 40,000+'
-    return `USD ${value.toLocaleString()}`
+    if (value >= MAX_BUDGET) return `${CURRENCIES.GBP.symbol}40,000+`
+    return formatPriceWithCurrency(value)
   }
 
   const minPercent = getPercentage(localMin)
@@ -276,7 +277,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
   }
 
   return (
-    <aside className="bg-white rounded-xl md:rounded-2xl shadow-lg border border-slate-100 p-4 md:p-5 lg:p-6 space-y-5 sticky top-4 self-start">
+    <aside className="bg-white rounded-xl md:rounded-2xl shadow-lg border border-slate-100 p-4 md:p-5 lg:p-6 space-y-5 md:sticky md:top-4 self-start w-full md:w-auto">
       <h2 className="text-base md:text-lg font-semibold text-slate-800 mb-1">
         {mode === 'flights' ? 'Smart filters' : 'Filter by'}
       </h2>
@@ -309,7 +310,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                     value={option.value}
                     checked={filters.stops === option.value}
                     onChange={() => handleStopsChange(option.value)}
-                    className="h-3 w-3 text-teal-600 border-slate-300 focus:ring-teal-500"
+                    className="h-3 w-3 text-teal-600 border-slate-300 focus:ring-teal-500 accent-teal-600"
                   />
                   <span className="text-slate-700">{option.label}</span>
                 </label>
@@ -320,14 +321,14 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
           <div>
             <h3 className="text-xs font-semibold text-slate-700 mb-2">Maximum price (per person)</h3>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-500">$</span>
+              <span className="text-xs text-slate-500">{CURRENCIES.GBP.symbol}</span>
               <input
                 type="number"
                 min="0"
                 step="10"
                 value={filters.maxPrice}
                 onChange={handleChange('maxPrice')}
-                className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-xs"
+                className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
             </div>
           </div>
@@ -349,7 +350,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                     value={option.value}
                     checked={filters.timeOfDay === option.value}
                     onChange={handleChange('timeOfDay')}
-                    className="h-3 w-3 text-teal-600 border-slate-300 focus:ring-teal-500"
+                    className="h-3 w-3 text-teal-600 border-slate-300 focus:ring-teal-500 accent-teal-600"
                   />
                   <span className="text-slate-700">{option.label}</span>
                 </label>
@@ -370,7 +371,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                       type="checkbox"
                       checked={filters.airlines?.includes(airline)}
                       onChange={() => handleAirlineToggle(airline)}
-                      className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500"
+                      className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500 accent-teal-600"
                     />
                     <span className="text-slate-700">{airline}</span>
                   </span>
@@ -397,7 +398,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                               type="checkbox"
                               checked={filters.departureAirports?.includes(ap.code)}
                               onChange={() => handleAirportToggle('departure', ap.code)}
-                              className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500"
+                              className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500 accent-teal-600"
                             />
                             <span className="text-slate-700">
                               {ap.city} ({ap.code})
@@ -426,7 +427,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                               type="checkbox"
                               checked={filters.arrivalAirports?.includes(ap.code)}
                               onChange={() => handleAirportToggle('arrival', ap.code)}
-                              className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500"
+                              className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500 accent-teal-600"
                             />
                             <span className="text-slate-700">
                               {ap.city} ({ap.code})
@@ -454,7 +455,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                 step="1"
                 value={filters.maxDurationHours}
                 onChange={handleChange('maxDurationHours')}
-                className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-xs"
+                className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
               <span className="text-xs text-slate-500">hours</span>
             </div>
@@ -503,7 +504,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                         return { ...prev, popularAmenities: next }
                       })
                     }}
-                    className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500"
+                    className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500 accent-teal-600"
                   />
                   <span className="text-slate-700">{amenity}</span>
                 </label>
@@ -529,7 +530,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                         return { ...prev, propertyTypes: next }
                       })
                     }}
-                    className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500"
+                    className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500 accent-teal-600"
                   />
                   <span className="text-slate-700">{type}</span>
                 </label>
@@ -546,7 +547,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                 step="0.5"
                 value={filters.maxDistanceKm}
                 onChange={handleChange('maxDistanceKm')}
-                className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-xs"
+                className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-xs [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
               <span className="text-xs text-slate-500">km max</span>
             </div>
@@ -595,7 +596,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                         return { ...prev, popularAmenities: next }
                       })
                     }}
-                    className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500"
+                    className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500 accent-teal-600"
                   />
                   <span className="text-slate-700">{amenity}</span>
                 </label>
@@ -621,7 +622,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                         return { ...prev, propertyTypes: next }
                       })
                     }}
-                    className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500"
+                    className="h-3 w-3 text-teal-600 border-slate-300 rounded focus:ring-teal-500 accent-teal-600"
                   />
                   <span className="text-slate-700">{type}</span>
                 </label>
@@ -639,7 +640,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                 placeholder="0"
                 value={filters.maxDistanceKm}
                 onChange={handleChange('maxDistanceKm')}
-                className="flex-1 px-3 py-2 rounded-lg border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm text-slate-700 placeholder:text-slate-400 transition-all"
+                className="flex-1 px-3 py-2 rounded-lg border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm text-slate-700 placeholder:text-slate-400 transition-all [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
               <div className="flex flex-col items-center justify-center min-w-[50px]">
                 <span className="text-xs font-medium text-slate-600">km</span>
@@ -652,7 +653,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
             <h3 className="text-xs font-semibold text-slate-800 mb-2.5">Budget per person</h3>
             <div className="flex items-center gap-2">
               <div className="flex items-center justify-center min-w-[45px] px-2 py-2 bg-white rounded-lg border border-slate-200">
-                <span className="text-xs font-semibold text-slate-700">USD</span>
+                <span className="text-xs font-semibold text-slate-700">GBP</span>
               </div>
               <input
                 type="number"
@@ -661,7 +662,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                 placeholder="Enter amount"
                 value={filters.maxBudget}
                 onChange={handleChange('maxBudget')}
-                className="flex-1 px-3 py-2 rounded-lg border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm text-slate-700 placeholder:text-slate-400 transition-all"
+                className="flex-1 px-3 py-2 rounded-lg border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm text-slate-700 placeholder:text-slate-400 transition-all [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
             </div>
           </div>
@@ -676,7 +677,7 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
                 placeholder="1"
                 value={filters.minNights}
                 onChange={handleChange('minNights')}
-                className="flex-1 px-3 py-2 rounded-lg border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm text-slate-700 placeholder:text-slate-400 transition-all"
+                className="flex-1 px-3 py-2 rounded-lg border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm text-slate-700 placeholder:text-slate-400 transition-all [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               />
               <div className="flex items-center justify-center min-w-[60px] px-2 py-2 bg-white rounded-lg border border-slate-200">
                 <span className="text-xs font-medium text-slate-600">nights</span>

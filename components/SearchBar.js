@@ -33,6 +33,7 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
   const [isOriginOpen, setIsOriginOpen] = useState(false)
   const [isDestinationOpen, setIsDestinationOpen] = useState(false)
   const formRef = useRef(null)
+  const ignoreNextClickRef = useRef(false)
 
   const handleSubmit = useCallback(
     (e) => {
@@ -75,14 +76,22 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Don't close if clicking on a button that opens a dropdown
-      const target = event.target
-      const isDropdownButton = target.closest('button[type="button"]') || 
-                               target.closest('input[type="text"]') ||
-                               target.closest('[role="dialog"]') ||
-                               target.closest('.absolute')
+      // If we're ignoring the next click (e.g., from a form input interaction), skip
+      if (ignoreNextClickRef.current) {
+        ignoreNextClickRef.current = false
+        return
+      }
       
-      if (formRef.current && !formRef.current.contains(event.target) && !isDropdownButton) {
+      // Check if click is inside the form or on a dropdown element
+      const target = event.target
+      const isInsideForm = formRef.current && formRef.current.contains(target)
+      const isDropdownElement = target.closest('.absolute') || 
+                               target.closest('[role="dialog"]') ||
+                               target.closest('input[type="date"]')
+      
+      // Only close if clicking outside the form AND not on a dropdown element
+      // The isInsideForm check should catch all form inputs and buttons
+      if (!isInsideForm && !isDropdownElement) {
         console.log('Closing all dropdowns - clicked outside')
         setIsLocationOpen(false)
         setIsTravellersOpen(false)
@@ -105,12 +114,12 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
       }
     }
 
-    // Use click event instead of mousedown to allow onClick handlers to fire first
-    document.addEventListener('click', handleClickOutside, true)
+    // Use click event - setTimeout ensures onClick/onFocus handlers run first
+    document.addEventListener('click', handleClickOutside)
     document.addEventListener('keydown', handleKeyDown)
 
     return () => {
-      document.removeEventListener('click', handleClickOutside, true)
+      document.removeEventListener('click', handleClickOutside)
       document.removeEventListener('keydown', handleKeyDown)
     }
   }, [])
@@ -309,11 +318,7 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
         </div>
 
         {/* Unified horizontal search bar container */}
-        <div className={`flex flex-col md:flex-row items-stretch border rounded-lg bg-white transition-colors ${
-          isOriginOpen || isDestinationOpen || isDatesOpen || isFlightTravellersOpen
-            ? 'border-teal-500 ring-2 ring-teal-500'
-            : 'border-slate-200 hover:border-teal-500'
-        }`}>
+        <div className="flex flex-col md:flex-row items-stretch bg-white rounded-lg relative">
           {/* From field */}
           <div className="flex-1 relative">
             <input
@@ -321,8 +326,12 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
               placeholder="From?"
               value={filters.origin}
               onChange={handleOriginInputChange}
+              onMouseDown={(e) => {
+                ignoreNextClickRef.current = true
+              }}
               onFocus={() => {
                 console.log('Origin field focused')
+                ignoreNextClickRef.current = true
                 setIsOriginOpen(true)
                 setIsDestinationOpen(false)
                 setIsDatesOpen(false)
@@ -331,20 +340,48 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
               onClick={(e) => {
                 e.stopPropagation()
                 console.log('Origin field clicked')
+                ignoreNextClickRef.current = true
                 setIsOriginOpen(true)
                 setIsDestinationOpen(false)
                 setIsDatesOpen(false)
                 setIsFlightTravellersOpen(false)
               }}
-              className={`w-full px-4 py-3 text-sm focus:outline-none border-0 ${
-                isOriginOpen ? 'bg-teal-50' : 'bg-transparent'
+              className={`w-full px-4 py-3 text-sm focus:outline-none border rounded-lg md:rounded-l-lg md:rounded-r-none md:border-r-0 ${
+                isOriginOpen 
+                  ? 'bg-teal-50 border-slate-200' 
+                  : 'bg-transparent border-slate-200'
               }`}
               aria-autocomplete="list"
               aria-haspopup="listbox"
               aria-expanded={isOriginOpen}
             />
+            {/* Swap button for mobile - positioned absolutely */}
+            <button
+              type="button"
+              onClick={handleSwapOriginDestination}
+              className="md:hidden absolute right-3 top-10 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-white hover:bg-slate-50 focus:outline-none transition-colors border border-slate-200 rounded-full shadow-sm"
+              aria-label="Swap origin and destination"
+            >
+              <svg
+                className="w-5 h-5 text-slate-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                />
+              </svg>
+            </button>
+            {/* Divider after From field - hidden on mobile */}
+            {!isOriginOpen && (
+              <div className="hidden md:block absolute right-0 top-0 bottom-0 w-px bg-slate-200"></div>
+            )}
             {isOriginOpen && (
-              <div className="absolute z-50 top-full left-0 mt-2 w-full bg-white rounded-xl shadow-xl border border-slate-100 p-3 text-sm max-h-64 overflow-y-auto" style={{ position: 'absolute', display: 'block' }}>
+              <div className="absolute z-50 top-full left-0 mt-2 w-full sm:w-auto min-w-full sm:min-w-[360px] bg-white rounded-xl shadow-xl border border-slate-100 p-3 text-sm max-h-64 overflow-y-auto" style={{ position: 'absolute', display: 'block' }}>
                 {originQuery && originSuggestions.length > 0 && (
                   <div>
                     <p className="font-semibold text-slate-700 mb-2 text-xs">Search results</p>
@@ -418,33 +455,33 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
             )}
           </div>
 
-          {/* Divider */}
-          <div className="w-px bg-slate-200 self-stretch"></div>
-
-          {/* Swap button */}
-          <button
-            type="button"
-            onClick={handleSwapOriginDestination}
-            className="px-2 flex items-center justify-center bg-white hover:bg-slate-50 focus:outline-none transition-colors"
-            aria-label="Swap origin and destination"
-          >
-            <svg
-              className="w-5 h-5 text-slate-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {/* Swap button for desktop - in flex flow */}
+          <div className="hidden md:flex relative flex-shrink-0">
+            <button
+              type="button"
+              onClick={handleSwapOriginDestination}
+              className="px-2 h-full flex items-center justify-center bg-white hover:bg-slate-50 focus:outline-none transition-colors border-y border-slate-200"
+              aria-label="Swap origin and destination"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-              />
-            </svg>
-          </button>
-
-          {/* Divider */}
-          <div className="w-px bg-slate-200 self-stretch"></div>
+              <svg
+                className="w-5 h-5 text-slate-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                />
+              </svg>
+            </button>
+            {/* Divider after swap button */}
+            {!isOriginOpen && !isDestinationOpen && (
+              <div className="absolute right-0 top-0 bottom-0 w-px bg-slate-200"></div>
+            )}
+          </div>
 
           {/* To field */}
           <div className="flex-1 relative">
@@ -453,8 +490,12 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
               placeholder="To?"
               value={filters.destination}
               onChange={handleDestinationInputChange}
+              onMouseDown={(e) => {
+                ignoreNextClickRef.current = true
+              }}
               onFocus={() => {
                 console.log('Destination field focused')
+                ignoreNextClickRef.current = true
                 setIsDestinationOpen(true)
                 setIsOriginOpen(false)
                 setIsDatesOpen(false)
@@ -463,20 +504,27 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
               onClick={(e) => {
                 e.stopPropagation()
                 console.log('Destination field clicked')
+                ignoreNextClickRef.current = true
                 setIsDestinationOpen(true)
                 setIsOriginOpen(false)
                 setIsDatesOpen(false)
                 setIsFlightTravellersOpen(false)
               }}
-              className={`w-full px-4 py-3 text-sm focus:outline-none border-0 ${
-                isDestinationOpen ? 'bg-teal-50' : 'bg-transparent'
+              className={`w-full px-4 py-3 text-sm focus:outline-none border rounded-lg md:rounded-none md:border-l-0 md:border-r-0 ${
+                isDestinationOpen 
+                  ? 'bg-teal-50 border-slate-200' 
+                  : 'bg-transparent border-slate-200'
               }`}
               aria-autocomplete="list"
               aria-haspopup="listbox"
               aria-expanded={isDestinationOpen}
             />
+            {/* Divider after To field - hidden on mobile */}
+            {!isDestinationOpen && !isDatesOpen && (
+              <div className="hidden md:block absolute right-0 top-0 bottom-0 w-px bg-slate-200"></div>
+            )}
             {isDestinationOpen && (
-              <div className="absolute z-50 top-full left-0 mt-2 w-full bg-white rounded-xl shadow-xl border border-slate-100 p-3 text-sm max-h-64 overflow-y-auto" style={{ position: 'absolute', display: 'block' }}>
+              <div className="absolute z-50 top-full left-0 mt-2 w-full sm:w-auto min-w-full sm:min-w-[360px] bg-white rounded-xl shadow-xl border border-slate-100 p-3 text-sm max-h-64 overflow-y-auto" style={{ position: 'absolute', display: 'block' }}>
                 {destinationQuery && destinationSuggestions.length > 0 && (
                   <div>
                     <p className="font-semibold text-slate-700 mb-2 text-xs">Search results</p>
@@ -550,17 +598,18 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
             )}
           </div>
 
-          {/* Divider */}
-          <div className="w-px bg-slate-200 self-stretch"></div>
-
           {/* Date field */}
-          <div className="flex-1 relative">
+          <div className="flex-1 relative overflow-visible">
             <button
               type="button"
+              onMouseDown={(e) => {
+                ignoreNextClickRef.current = true
+              }}
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
                 console.log('Date button clicked, current state:', isDatesOpen)
+                ignoreNextClickRef.current = true
                 const newState = !isDatesOpen
                 console.log('Setting dates open to:', newState)
                 setIsDatesOpen(newState)
@@ -568,15 +617,21 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
                 setIsDestinationOpen(false)
                 setIsFlightTravellersOpen(false)
               }}
-              className={`w-full px-4 py-3 text-left text-sm text-slate-700 focus:outline-none border-0 ${
-                isDatesOpen ? 'bg-teal-50' : 'bg-transparent hover:bg-slate-50'
+              className={`w-full px-4 py-3 text-left text-sm text-slate-700 focus:outline-none border rounded-lg md:rounded-none md:border-l-0 md:border-r-0 ${
+                isDatesOpen 
+                  ? 'bg-teal-50 border-slate-200' 
+                  : 'bg-transparent border-slate-200 hover:bg-slate-50'
               }`}
             >
               {dateRangeDisplay}
             </button>
+            {/* Divider after Date field - hidden on mobile */}
+            {!isDatesOpen && !isFlightTravellersOpen && (
+              <div className="hidden md:block absolute right-0 top-0 bottom-0 w-px bg-slate-200"></div>
+            )}
             {isDatesOpen && (
               <div 
-                className="absolute z-50 top-full left-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 p-4 min-w-[280px]"
+                className="absolute z-50 top-full left-0 mt-2 w-full sm:w-auto min-w-full sm:min-w-[280px] bg-white rounded-xl shadow-xl border border-slate-100 p-4"
                 onClick={(e) => {
                   e.stopPropagation()
                   console.log('Date dropdown clicked')
@@ -622,17 +677,18 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
             )}
           </div>
 
-          {/* Divider */}
-          <div className="w-px bg-slate-200 self-stretch"></div>
-
           {/* Travellers field */}
-          <div className="flex-1 relative">
+          <div className="flex-1 relative overflow-visible">
             <button
               type="button"
+              onMouseDown={(e) => {
+                ignoreNextClickRef.current = true
+              }}
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
                 console.log('Travellers button clicked, current state:', isFlightTravellersOpen)
+                ignoreNextClickRef.current = true
                 const newState = !isFlightTravellersOpen
                 console.log('Setting travellers open to:', newState)
                 setIsFlightTravellersOpen(newState)
@@ -640,15 +696,21 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
                 setIsDestinationOpen(false)
                 setIsDatesOpen(false)
               }}
-              className={`w-full px-4 py-3 text-left text-sm text-slate-700 focus:outline-none border-0 ${
-                isFlightTravellersOpen ? 'bg-teal-50' : 'bg-transparent hover:bg-slate-50'
+              className={`w-full px-4 py-3 text-left text-sm text-slate-700 focus:outline-none border rounded-lg md:rounded-none md:border-l-0 ${
+                isFlightTravellersOpen 
+                  ? 'bg-teal-50 border-slate-200' 
+                  : 'bg-transparent border-slate-200 hover:bg-slate-50'
               }`}
             >
               {flightTravellersSummary}
             </button>
+            {/* Divider after Travelers field - hidden on mobile */}
+            {!isFlightTravellersOpen && (
+              <div className="hidden md:block absolute right-0 top-0 bottom-0 w-px bg-slate-200"></div>
+            )}
             {isFlightTravellersOpen && (
               <div 
-                className="absolute z-50 top-full right-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 p-4 min-w-[320px]"
+                className="absolute z-50 top-full left-0 sm:left-auto sm:right-0 mt-2 w-full sm:w-auto min-w-full sm:min-w-[320px] bg-white rounded-xl shadow-xl border border-slate-100 p-4"
                 onClick={(e) => {
                   e.stopPropagation()
                   console.log('Travellers dropdown clicked')
@@ -757,15 +819,12 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
             )}
           </div>
 
-          {/* Divider */}
-          <div className="w-px bg-slate-200 self-stretch"></div>
-
           {/* Search button */}
-          <div className="flex items-stretch">
+          <div className="flex items-stretch flex-shrink-0 w-full md:w-auto mt-2 md:mt-0">
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-sm whitespace-nowrap rounded-r-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+              className="w-full md:w-auto px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-sm whitespace-nowrap  md:rounded-r-lg rounded-lg md:rounded-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 h-full"
             >
               Search
             </button>

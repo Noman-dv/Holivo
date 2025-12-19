@@ -1,5 +1,6 @@
 import Card from './Card'
 import Button from './Button'
+import { formatPriceWithCurrency } from '../lib/currency'
 
 /**
  * Rich hotel result card for search and AI results.
@@ -116,7 +117,7 @@ export default function HotelResultCard({ hotel, badge, showDistance = true }) {
             <div className="flex items-end gap-3">
               <div className="text-right">
                 <p className="text-xl sm:text-2xl font-bold text-teal-600">
-                  ${hotel.pricePerNight.toFixed(2)}
+                  {formatPriceWithCurrency(hotel.pricePerNight)}
                 </p>
                 <p className="text-[11px] text-slate-500">per night • pay on partner site</p>
               </div>

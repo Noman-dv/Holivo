@@ -1,5 +1,6 @@
 import Card from './Card'
 import Button from './Button'
+import { formatPriceWithCurrency } from '../lib/currency'
 
 /**
  * Card used on the AI Holiday results page.
@@ -8,20 +9,20 @@ import Button from './Button'
 export default function AiHolidayResultCard({ holiday }) {
   if (!holiday) return null
 
-  // Budget is already in USD
-  const budgetUSD = holiday.estimatedBudget
-  const pricePerNight = Math.round(budgetUSD / (holiday.nights || 1))
+  // Budget amount
+  const budget = holiday.estimatedBudget
+  const pricePerNight = Math.round(budget / (holiday.nights || 1))
 
   return (
     <Card className="border-slate-200 hover:border-teal-400 hover:shadow-lg transition-all">
-      <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+      <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:items-stretch">
         {/* Imagery / destination */}
-        <div className="w-full md:w-72 lg:w-80 flex-shrink-0">
-          <div className="relative w-full h-52 md:h-56 rounded-xl overflow-hidden bg-slate-100">
+        <div className="w-full md:w-72 lg:w-80 flex-shrink-0 md:flex">
+          <div className="relative w-full h-full rounded-xl overflow-hidden bg-slate-100">
             <img
               src={holiday.image}
               alt={holiday.destination}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover min-h-[200px] md:min-h-[285px]"
             />
             <div className="absolute top-3 left-3 flex flex-col gap-2">
               <span className="bg-teal-600 text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-sm">
@@ -95,10 +96,10 @@ export default function AiHolidayResultCard({ holiday }) {
             <div className="flex items-end gap-4 sm:gap-6">
               <div className="text-right">
                 <p className="text-2xl sm:text-3xl font-bold text-slate-900 mb-0.5">
-                  ${budgetUSD.toLocaleString()}
+                  {formatPriceWithCurrency(budget, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                 </p>
                 <p className="text-xs text-slate-500">
-                  ${pricePerNight.toLocaleString()} per night
+                  {formatPriceWithCurrency(pricePerNight, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} per night
                 </p>
                 <p className="text-xs text-slate-400 mt-0.5">
                   + taxes and fees

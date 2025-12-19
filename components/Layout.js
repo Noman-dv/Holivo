@@ -1,4 +1,5 @@
 import Navigation from './Navigation'
+import Footer from './Footer'
 
 /**
  * Main Layout Component
@@ -11,11 +12,7 @@ export default function Layout({ children }) {
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 flex-grow">
         {children}
       </main>
-      <footer className="bg-teal-600 text-white border-t mt-auto">
-        <div className="container mx-auto px-4 py-6 text-center">
-          <p className="text-teal-100">&copy; 2024 Holivo. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
