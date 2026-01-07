@@ -1,0 +1,3 @@
+module.exports=[38299,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(30021);a.n(d("[project]/Sites/Holivo/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},52621,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(30021);a.n(d("[project]/Sites/Holivo/node_modules/next/dist/client/components/builtin/global-error.js"))},4282,a=>{"use strict";a.i(38299);var b=a.i(52621);a.n(b)}];
+
+//# sourceMappingURL=26df1_next_dist_client_components_builtin_global-error_a6d9d857.js.map
