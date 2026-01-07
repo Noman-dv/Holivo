@@ -59,9 +59,9 @@ export default function CarsPage() {
       <div className="max-w-6xl mx-auto">
         <div className="mb-6 md:mb-8">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-teal-600 mb-2 md:mb-4">Search Car Rentals</h1>
-          <p className="text-base sm:text-lg text-gray-600">
+          {/* <p className="text-base sm:text-lg text-gray-600">
             Find the perfect rental car for your travel needs
-          </p>
+          </p> */}
         </div>
 
         {/* Search Form */}
