@@ -1,0 +1,10 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/ai-holiday/page": "/ai-holiday",
+  "/cars/page": "/cars",
+  "/compare/page": "/compare",
+  "/flights/page": "/flights",
+  "/hotels/page": "/hotels",
+  "/page": "/"
+}
