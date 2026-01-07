@@ -2,12 +2,13 @@
   "name": "holivo",
   "version": "1.0.0",
   "description": "Travel comparison platform for comparing flights, hotels, and car rentals",
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
+ "scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint",
+  "export": "next build && next export"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
