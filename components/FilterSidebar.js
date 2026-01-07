@@ -161,6 +161,7 @@ function BudgetRangeSlider({ minPrice, maxPrice, onMinChange, onMaxChange }) {
               width: `${maxPercent - minPercent}%`,
             }}
           />
+          
 
           {/* Min handle */}
           <div
