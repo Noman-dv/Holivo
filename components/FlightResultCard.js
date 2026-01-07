@@ -52,6 +52,7 @@ export default function FlightResultCard({ flight }) {
               <p className="font-semibold text-slate-900">{formatTime(flight.departure.time)}</p>
               <p className="text-slate-600">{flight.departure.airport}</p>
               <p className="text-[11px] text-slate-500">{flight.departure.city}</p>
+              
             </div>
             <div className="hidden sm:block">
               <p className="text-[11px] uppercase tracking-wide text-slate-400">Duration</p>
