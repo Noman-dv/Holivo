@@ -42,7 +42,7 @@ export default function FlightResultCard({ flight }) {
               </span>
             )}
             <span className="text-[11px] font-medium bg-teal-50 text-teal-700 px-2 py-1 rounded-full border border-teal-100">
-              Mock deal for demo
+              Beta
             </span>
           </div>
 
@@ -68,7 +68,7 @@ export default function FlightResultCard({ flight }) {
             <div>
               <p className="text-[11px] uppercase tracking-wide text-slate-400">Date</p>
               <p className="font-semibold text-slate-900">{formatDate(flight.departure.time)}</p>
-              <p className="text-[11px] text-slate-500">Times & prices are mock values</p>
+              <p className="text-[11px] text-slate-500">Live prices from partners</p>
             </div>
           </div>
         </div>

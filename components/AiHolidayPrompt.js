@@ -53,7 +53,7 @@ export default function AiHolidayPrompt() {
           Describe my holiday
         </Button>
         <p className="text-[11px] text-slate-500 sm:flex-1">
-          Mock-only preview. We&apos;ll later combine this with live partner prices.
+          We&apos;re in beta. Results combine AI matching with live partner prices.
         </p>
       </div>
       <div className="flex flex-wrap gap-2">

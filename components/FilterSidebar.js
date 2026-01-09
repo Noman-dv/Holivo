@@ -285,12 +285,12 @@ export default function FilterSidebar({ mode = 'hotels', onChange, flightOptions
       {mode === 'flights' && flightOptions?.totalCount > 0 && (
         <p className="text-[11px] text-slate-500">
           {(flightOptions.filteredCount ?? flightOptions.totalCount) || 0} of{' '}
-          {flightOptions.totalCount} mock flights
+          {flightOptions.totalCount} flights
         </p>
       )}
       <p className="text-xs text-slate-500">
         Fine-tune your {mode === 'flights' ? 'flight search' : mode === 'ai' ? 'AI matches' : 'stay'} with
-        flexible filters. All data is mock-only for this MVP.
+        flexible filters. We&apos;re in beta and continuously improving.
       </p>
 
       {mode === 'flights' && (

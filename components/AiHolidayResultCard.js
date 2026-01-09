@@ -90,7 +90,7 @@ export default function AiHolidayResultCard({ holiday }) {
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 pt-4 border-t border-slate-200">
             <div className="text-xs text-slate-500">
               <p className="mb-1">{holiday.nights} {holiday.nights === 1 ? 'night' : 'nights'}, 2 adults</p>
-              <p>Mock data only. Final prices from partner sites.</p>
+              <p>Prices from partner sites. We&apos;re in beta.</p>
             </div>
 
             <div className="flex items-end gap-4 sm:gap-6">

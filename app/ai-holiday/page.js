@@ -124,11 +124,10 @@ export default function AiHolidayPage() {
         <section className="space-y-3">
           <p className="text-xs uppercase tracking-wide text-slate-500">AI holiday helper</p>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900">
-            Describe your perfect holiday. We&apos;ll match it with mock trips.
+            Describe your perfect holiday. We&apos;ll match it with personalized trips.
           </h1>
           <p className="text-sm sm:text-base text-slate-600 max-w-2xl">
-            This page demonstrates how AI-powered trip ideas will look. Results come from structured
-            mock data only; in production, we&apos;ll combine AI with live partner prices.
+            Our AI-powered trip suggestions combine intelligent matching with live partner prices to find your ideal holiday.
           </p>
         </section>
 
@@ -177,7 +176,7 @@ export default function AiHolidayPage() {
                 {loading ? 'Thinking…' : 'Generate AI holiday ideas'}
               </Button>
               <p className="text-xs text-slate-500 sm:self-center">
-                Mock-only preview. Final deals will open on partner sites.
+                We&apos;re in beta. Final deals will open on partner sites.
               </p>
             </div>
           </form>

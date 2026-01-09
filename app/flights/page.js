@@ -187,8 +187,7 @@ export default function FlightsPage() {
             Search hundreds of flight sites at once
           </h1>
           <p className="text-sm sm:text-base text-slate-600 max-w-2xl">
-            Use mock results to explore how Holivo will compare real-time flight prices from our
-            partner sites in the next phase.
+            Compare real-time flight prices from our partner sites. We&apos;re in beta and continuously improving our platform.
           </p>
         </section>
 
@@ -218,12 +217,11 @@ export default function FlightsPage() {
                 <div>
                   <p className="text-sm font-semibold text-slate-800">
                     {filteredFlights.length > 0
-                      ? `${filteredFlights.length} mock flights found`
+                      ? `${filteredFlights.length} flights found`
                       : 'No flights match your current filters'}
                   </p>
                   <p className="text-xs text-slate-500">
-                    Showing sample data only. In production, you&apos;ll see live prices from
-                    partner sites.
+                    Live prices from partner sites. We&apos;re in beta and continuously improving our platform.
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 text-xs">
@@ -246,7 +244,7 @@ export default function FlightsPage() {
               <Card className="border-slate-200">
                 <div className="text-center py-8">
                   <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-teal-600"></div>
-                  <p className="mt-2 text-slate-600 text-sm">Loading mock flights…</p>
+                  <p className="mt-2 text-slate-600 text-sm">Loading flights…</p>
                 </div>
               </Card>
             )}
@@ -263,13 +261,12 @@ export default function FlightsPage() {
             {/* Empty state */}
             {!loading && (!searchResults.flights || searchResults.flights.length === 0) && (
               <Card className="bg-teal-50 border-teal-200">
-                <h3 className="text-lg font-semibold mb-2 text-teal-800">Try a mock search</h3>
+                <h3 className="text-lg font-semibold mb-2 text-teal-800">Start your search</h3>
                 <ul className="list-disc list-inside text-slate-700 space-y-1 text-sm mb-3">
-                  <li>Start from New York (JFK) to Los Angeles (LAX).</li>
-                  <li>Adjust filters on the left to see how the layout responds.</li>
+                  <li>Search from any origin to any destination.</li>
+                  <li>Adjust filters on the left to refine your results.</li>
                   <li>
-                    In a future phase, these results will redirect you to partner sites to complete
-                    your booking.
+                    When you find a flight, click &quot;View booking options&quot; to complete your booking on partner sites.
                   </li>
                 </ul>
                 <Link href="/" className="text-xs text-teal-700 underline">

@@ -32,7 +32,7 @@ export default function TermsAndConditions() {
             <div className="space-y-4">
               <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Use of the Website</h2>
               <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-                Holivo provides a travel comparison platform for flights, hotels, and related services. Results may include mock or sample data during development phases.
+                Holivo provides a travel comparison platform for flights and hotels. We&apos;re currently in beta and continuously improving our platform.
               </p>
               <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
                 You agree to use the website lawfully and not to:

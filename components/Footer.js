@@ -86,7 +86,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="text-teal-100 text-sm mb-4 max-w-md">
-              Your trusted travel companion for comparing flights, hotels, and car rentals. Find the best deals and plan your perfect trip.
+              Your trusted travel companion for comparing flights and hotels. Find the best deals and plan your perfect trip.
             </p>
             {/* Social Media Links */}
             <div className="flex space-x-4">
@@ -176,22 +176,12 @@ export default function Footer() {
 
         {/* Contact Information */}
         <div className="border-t border-teal-500 pt-6 mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-teal-100">
+          <div className="text-sm text-teal-100">
             <div>
               <p className="font-semibold text-white mb-1">Email</p>
-              <a href="mailto:support@holivo.com" className="hover:text-white transition-colors">
-                support@holivo.com
+              <a href="mailto:hello@getholivo.com" className="hover:text-white transition-colors">
+                hello@getholivo.com
               </a>
-            </div>
-            <div>
-              <p className="font-semibold text-white mb-1">Phone</p>
-              <a href="tel:+1234567890" className="hover:text-white transition-colors">
-                +1 (234) 567-890
-              </a>
-            </div>
-            <div>
-              <p className="font-semibold text-white mb-1">Address</p>
-              <p>123 Travel Street, Suite 100<br />New York, NY 10001</p>
             </div>
           </div>
         </div>

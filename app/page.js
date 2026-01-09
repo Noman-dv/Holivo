@@ -10,7 +10,7 @@ import PopularDestinations from '../components/PopularDestinations'
 
 export const metadata = {
   title: 'Holivo - Travel Comparison Platform',
-  description: 'Compare and find the best travel deals for flights, hotels, and car rentals',
+  description: 'Compare and find the best travel deals for flights and hotels',
 }
 
 export default function Home() {
@@ -24,8 +24,7 @@ export default function Home() {
               Where to next with Holivo?
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-              Start with stays, flights, or let our AI-style helper suggest holiday ideas using mock
-              data that will later be powered by live partner prices.
+              Start with stays, flights, or let our AI-style helper suggest holiday ideas powered by live partner prices.
             </p>
           </div>
 
@@ -50,8 +49,7 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-xs text-gray-500">
-                All results are mock-only for this phase. In production, selecting a deal will take
-                you to our partner sites to complete your booking.
+                We&apos;re currently in beta. Selecting a deal will take you to our partner sites to complete your booking.
               </p>
             </Card>
 
@@ -62,7 +60,7 @@ export default function Home() {
                 </p>
                 <p className="text-sm text-gray-700">
                   Prefer to start with an idea instead of dates and destinations? Describe your ideal
-                  break and we&apos;ll show AI-style mock matches.
+                  break and we&apos;ll show AI-powered holiday matches.
                 </p>
                 <AiHolidayPrompt />
               </div>

@@ -988,7 +988,7 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
               )}
 
               {locationQuery && typedSuggestions.length === 0 && (
-                <p className="text-[11px] text-slate-500">No mock destinations match your search.</p>
+                <p className="text-[11px] text-slate-500">No destinations match your search.</p>
               )}
             </div>
           )}
@@ -1038,8 +1038,7 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
                 </div>
               </div>
               <p className="mt-2 text-[11px] text-slate-500">
-                Dates are mock-only for this MVP. In production, you&apos;ll see real availability
-                from partner sites.
+                We&apos;re in beta. You&apos;ll see real availability from partner sites.
               </p>
             </div>
           )}
@@ -1121,8 +1120,7 @@ export default function SearchBar({ mode = 'flights', onSearch, loading = false 
               ))}
 
               <p className="mt-3 text-xs text-slate-500">
-                Traveller details are used only for mock filtering in this MVP. Final availability
-                and pricing will come from partner sites.
+                We&apos;re in beta. Final availability and pricing come from partner sites.
               </p>
               <div className="mt-4 flex justify-end">
                 <Button

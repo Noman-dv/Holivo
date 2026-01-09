@@ -58,9 +58,6 @@ export default function HotelResultCard({ hotel, badge, showDistance = true }) {
                 {badge}
               </span>
             )}
-            <span className="absolute bottom-2 left-2 bg-slate-900/70 text-white text-[10px] px-2 py-1 rounded">
-              Mock photo for demo
-            </span>
           </div>
         </div>
 
@@ -72,11 +69,6 @@ export default function HotelResultCard({ hotel, badge, showDistance = true }) {
               <p className="text-xs text-slate-600">
                 {hotel.location.city} • {hotel.location.address}
               </p>
-              {showDistance && (
-                <p className="text-[11px] text-slate-500 mt-1">
-                  Distance is illustrative only for this mock layout
-                </p>
-              )}
             </div>
 
             <div className="flex items-center gap-2">
@@ -85,7 +77,7 @@ export default function HotelResultCard({ hotel, badge, showDistance = true }) {
               </div>
               <div className="text-xs">
                 <p className="font-semibold text-slate-800">{scoreLabel}</p>
-                <p className="text-slate-500">Mock reviews</p>
+                <p className="text-slate-500">Guest reviews</p>
               </div>
             </div>
           </div>
@@ -111,7 +103,7 @@ export default function HotelResultCard({ hotel, badge, showDistance = true }) {
 
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mt-1">
             <div className="text-xs text-slate-600">
-              <p>2 nights • mock pricing for design only</p>
+              <p>2 nights • prices from partner sites</p>
             </div>
 
             <div className="flex items-end gap-3">
