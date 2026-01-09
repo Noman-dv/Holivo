@@ -25,7 +25,7 @@ export default function Footer() {
       { label: 'Privacy Policy', href: '/privacy' },
       { label: 'Terms & Conditions', href: '/terms' },
       { label: 'Cookie Policy', href: '/cookies' },
-      { label: 'Accessibility', href: '/accessibility' },
+      { label: 'Accessibility', href: '' },
     ],
     services: [
       { label: 'Flights', href: ROUTES.FLIGHTS },
