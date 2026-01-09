@@ -4,7 +4,10 @@
   "/ai-holiday/page": "/ai-holiday",
   "/cars/page": "/cars",
   "/compare/page": "/compare",
+  "/cookies/page": "/cookies",
   "/flights/page": "/flights",
   "/hotels/page": "/hotels",
-  "/page": "/"
+  "/page": "/",
+  "/privacy/page": "/privacy",
+  "/terms/page": "/terms"
 }

@@ -58,6 +58,12 @@
       "namedRegex": "^/compare(?:/)?$"
     },
     {
+      "page": "/cookies",
+      "regex": "^/cookies(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/cookies(?:/)?$"
+    },
+    {
       "page": "/flights",
       "regex": "^/flights(?:/)?$",
       "routeKeys": {},
@@ -68,6 +74,18 @@
       "regex": "^/hotels(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/hotels(?:/)?$"
+    },
+    {
+      "page": "/privacy",
+      "regex": "^/privacy(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/privacy(?:/)?$"
+    },
+    {
+      "page": "/terms",
+      "regex": "^/terms(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/terms(?:/)?$"
     }
   ],
   "dataRoutes": [],
