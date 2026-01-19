@@ -111,9 +111,13 @@ export default function TopUniqueProperties() {
                   {/* Image Container */}
                   <div className="relative w-full h-48 md:h-56 rounded-lg overflow-hidden bg-slate-100 mb-3">
                     <img
-                      src={hotel.image}
+                      src={hotel.mainImage || hotel.image || '/images/hotel-placeholder.jpg'}
                       alt={hotel.name}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = '/images/hotel-placeholder.jpg';
+                      }}
                     />
                     
                     {/* Heart Icon */}
@@ -139,8 +143,11 @@ export default function TopUniqueProperties() {
 
                   {/* Content */}
                   <div className="flex-1 flex flex-col">
-                    <h3 className="text-base font-semibold text-gray-900 mb-1 line-clamp-2">
-                      {hotel.name}
+                    <h3 
+                      className="text-base font-semibold text-gray-900 mb-1 cursor-pointer"
+                      title={hotel.name}
+                    >
+                      {hotel.name?.length > 20 ? `${hotel.name.substring(0, 20)}...` : hotel.name}
                     </h3>
                     <p className="text-sm text-gray-600 mb-3">
                       {hotel.location.city}

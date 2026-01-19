@@ -20,17 +20,22 @@ export default function FlightResultCard({ flight }) {
   }
 
   const isNonstop = flight.stops === 0
+  const cabinValue = flight.cabin || flight.class || 'Economy'
+  const cabinLabel = typeof cabinValue === 'string' ? cabinValue.replace(/_/g, ' ') : 'Economy'
 
   return (
     <Card className="border-slate-200 hover:border-teal-400 transition-colors">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex-1 space-y-3">
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-            <span className="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-              {flight.airline}
+            <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+              {flight.airline?.logo && (
+                <img src={flight.airline.logo} alt={flight.airline.name || flight.airline.code} className="h-4 w-auto" />
+              )}
+              {typeof flight.airline === 'object' ? (flight.airline.name || flight.airline.code) : flight.airline}
             </span>
             <span className="text-[11px] font-medium bg-purple-50 text-purple-700 px-2 py-1 rounded-full border border-purple-100">
-              {flight.class || 'Economy'}
+              {cabinLabel}
             </span>
             {isNonstop ? (
               <span className="text-[11px] font-medium bg-green-50 text-green-700 px-2 py-1 rounded-full border border-green-100">
@@ -75,7 +80,12 @@ export default function FlightResultCard({ flight }) {
 
         <div className="flex flex-row lg:flex-col items-end gap-3 lg:min-w-[160px]">
           <div className="text-right">
-            <p className="text-xl sm:text-2xl font-bold text-teal-600">{formatPriceWithCurrency(flight.price)}</p>
+            <p className="text-xl sm:text-2xl font-bold text-teal-600">
+              {typeof flight.price === 'object' 
+                ? (flight.price.formatted || `${flight.price.currency} ${flight.price.amount}`)
+                : formatPriceWithCurrency(flight.price)
+              }
+            </p>
             <p className="text-[11px] text-slate-500">per person • redirects to partner site</p>
           </div>
           <Button variant="primary" size="sm" className="w-full lg:w-auto whitespace-nowrap">
@@ -86,5 +96,4 @@ export default function FlightResultCard({ flight }) {
     </Card>
   )
 }
-
 

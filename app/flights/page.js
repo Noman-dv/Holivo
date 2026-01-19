@@ -9,11 +9,15 @@ import { useStore } from '../../store/useStore'
 import SearchBar from '../../components/SearchBar'
 import FilterSidebar from '../../components/FilterSidebar'
 import FlightResultCard from '../../components/FlightResultCard'
+import Pagination from '../../components/Pagination'
+
+const ITEMS_PER_PAGE = 8
 
 export default function FlightsPage() {
   const { filters, searchResults, updateSearchResults } = useStore()
   const [loading, setLoading] = useState(false)
   const [sidebarFilters, setSidebarFilters] = useState({})
+  const [currentPage, setCurrentPage] = useState(1)
   const hasLoadedRef = useRef(false)
 
   // Load mock results on component mount (only once)
@@ -44,6 +48,13 @@ export default function FlightsPage() {
         origin: currentFilters.origin,
         destination: currentFilters.destination,
         departureDate: currentFilters.departureDate,
+        travelClass: (currentFilters.travelClass || 'economy'),
+        adults:
+          (currentFilters.flightAdults && Number(currentFilters.flightAdults) > 0
+            ? currentFilters.flightAdults
+            : (currentFilters.passengers && Number(currentFilters.passengers) > 0
+                ? currentFilters.passengers
+                : 1)),
       })
       updateSearchResults('flights', results)
     } catch (error) {
@@ -68,7 +79,10 @@ export default function FlightsPage() {
 
     if (sidebarFilters.maxPrice) {
       const maxPrice = Number(sidebarFilters.maxPrice)
-      results = results.filter((flight) => flight.price <= maxPrice)
+      results = results.filter((flight) => {
+        const price = typeof flight.price === 'object' ? flight.price.amount : flight.price
+        return price <= maxPrice
+      })
     }
 
     if (
@@ -113,7 +127,10 @@ export default function FlightsPage() {
     }
 
     if (Array.isArray(sidebarFilters.airlines) && sidebarFilters.airlines.length > 0) {
-      results = results.filter((flight) => sidebarFilters.airlines.includes(flight.airline))
+      results = results.filter((flight) => {
+        const airlineName = typeof flight.airline === 'object' ? (flight.airline.name || flight.airline.code) : flight.airline
+        return sidebarFilters.airlines.includes(airlineName)
+      })
     }
 
     if (sidebarFilters.maxDurationHours) {
@@ -138,7 +155,8 @@ export default function FlightsPage() {
     const set = new Set()
     list.forEach((flight) => {
       if (flight.airline) {
-        set.add(flight.airline)
+        const airlineName = typeof flight.airline === 'object' ? (flight.airline.name || flight.airline.code) : flight.airline
+        set.add(airlineName)
       }
     })
     return Array.from(set)
@@ -176,6 +194,18 @@ export default function FlightsPage() {
   }, [searchResults.flights])
 
   const totalFlights = searchResults.flights?.length || 0
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredFlights.length / ITEMS_PER_PAGE)
+  const paginatedFlights = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+    return filteredFlights.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+  }, [filteredFlights, currentPage])
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [sidebarFilters, searchResults.flights])
 
   return (
     <Layout>
@@ -251,11 +281,22 @@ export default function FlightsPage() {
 
             {/* Results list */}
             {!loading && filteredFlights.length > 0 && (
-              <div className="space-y-3">
-                {filteredFlights.map((flight) => (
-                  <FlightResultCard key={flight.id} flight={flight} />
-                ))}
-              </div>
+              <>
+                <div className="space-y-3">
+                  {paginatedFlights.map((flight) => (
+                    <FlightResultCard key={flight.id} flight={flight} />
+                  ))}
+                </div>
+
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={filteredFlights.length}
+                  itemsPerPage={ITEMS_PER_PAGE}
+                  onPageChange={setCurrentPage}
+                  itemLabel="flights"
+                />
+              </>
             )}
 
             {/* Empty state */}
@@ -280,4 +321,3 @@ export default function FlightsPage() {
     </Layout>
   )
 }
-

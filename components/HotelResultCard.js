@@ -49,9 +49,13 @@ export default function HotelResultCard({ hotel, badge, showDistance = true }) {
         <div className="w-full md:w-64 flex-shrink-0">
           <div className="relative w-full h-44 md:h-48 rounded-lg overflow-hidden bg-slate-100">
             <img
-              src={hotel.image}
+              src={hotel.mainImage || hotel.image || '/images/hotel-placeholder.jpg'}
               alt={hotel.name}
               className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = '/images/hotel-placeholder.jpg';
+              }}
             />
             {badge && (
               <span className="absolute top-2 left-2 bg-amber-500 text-white text-[11px] font-semibold px-2 py-1 rounded">
@@ -65,7 +69,12 @@ export default function HotelResultCard({ hotel, badge, showDistance = true }) {
         <div className="flex-1 flex flex-col gap-3">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
             <div>
-              <h3 className="text-base sm:text-lg font-semibold text-slate-900">{hotel.name}</h3>
+              <h3 
+                className="text-base sm:text-lg font-semibold text-slate-900 cursor-pointer"
+                title={hotel.name}
+              >
+                {hotel.name?.length > 20 ? `${hotel.name.substring(0, 20)}...` : hotel.name}
+              </h3>
               <p className="text-xs text-slate-600">
                 {hotel.location.city} • {hotel.location.address}
               </p>
@@ -109,7 +118,7 @@ export default function HotelResultCard({ hotel, badge, showDistance = true }) {
             <div className="flex items-end gap-3">
               <div className="text-right">
                 <p className="text-xl sm:text-2xl font-bold text-teal-600">
-                  {formatPriceWithCurrency(hotel.pricePerNight)}
+                  {hotel.price?.formatted || formatPriceWithCurrency(hotel.pricePerNight)}
                 </p>
                 <p className="text-[11px] text-slate-500">per night • pay on partner site</p>
               </div>

@@ -8,11 +8,15 @@ import { useStore } from '../../store/useStore'
 import SearchBar from '../../components/SearchBar'
 import FilterSidebar from '../../components/FilterSidebar'
 import HotelResultCard from '../../components/HotelResultCard'
+import Pagination from '../../components/Pagination'
+
+const ITEMS_PER_PAGE = 8
 
 export default function HotelsPage() {
   const { filters, searchResults, updateSearchResults } = useStore()
   const [loading, setLoading] = useState(false)
   const [sidebarFilters, setSidebarFilters] = useState({})
+  const [currentPage, setCurrentPage] = useState(1)
   const hasLoadedRef = useRef(false)
 
   // Load mock results on component mount (only once)
@@ -95,6 +99,18 @@ export default function HotelsPage() {
     return results
   }, [searchResults.hotels, sidebarFilters])
 
+  // Pagination logic
+  const totalPages = Math.ceil(filteredHotels.length / ITEMS_PER_PAGE)
+  const paginatedHotels = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+    return filteredHotels.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+  }, [filteredHotels, currentPage])
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [sidebarFilters, searchResults.hotels])
+
   return (
     <Layout>
       <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
@@ -162,15 +178,26 @@ export default function HotelsPage() {
 
             {/* Results list */}
             {!loading && filteredHotels.length > 0 && (
-              <div className="space-y-3">
-                {filteredHotels.map((hotel, index) => (
-                  <HotelResultCard
-                    key={hotel.id}
-                    hotel={hotel}
-                    badge={index === 0 ? 'Featured' : undefined}
-                  />
-                ))}
-              </div>
+              <>
+                <div className="space-y-3">
+                  {paginatedHotels.map((hotel, index) => (
+                    <HotelResultCard
+                      key={hotel.id}
+                      hotel={hotel}
+                      badge={currentPage === 1 && index === 0 ? 'Featured' : undefined}
+                    />
+                  ))}
+                </div>
+
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={filteredHotels.length}
+                  itemsPerPage={ITEMS_PER_PAGE}
+                  onPageChange={setCurrentPage}
+                  itemLabel="properties"
+                />
+              </>
             )}
 
             {/* Empty state */}
